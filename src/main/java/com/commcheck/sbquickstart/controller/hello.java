@@ -7,7 +7,7 @@ public class hello {
 
     @GetMapping("/hello")
     public String helloSB() {
-        return "Hello, world!";
+        return "Hello, sbQuickSteart!";
     }
 }
 
