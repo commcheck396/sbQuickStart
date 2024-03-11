@@ -20,9 +20,9 @@ public class Result<T> {
         return new Result(0, "Operation success", null);
     }
 
-    public static Result success (String message) {
-        return new Result(0, message, null);
-    }
+//    public static Result success (String message) {
+//        return new Result(0, message, null);
+//    }
 
     public static Result fail (String message) {
         return new Result(1, message, null);

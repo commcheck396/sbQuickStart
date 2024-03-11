@@ -13,3 +13,22 @@ create table users(
                       created_time datetime not null comment 'Created Time',
                       updated_time datetime not null comment 'Updated Time'
 ) comment 'Users';
+
+create table tickets(
+                        id int unsigned auto_increment primary key comment 'ID',
+                        title varchar(100) not null comment 'Title',
+                        description varchar(10000) not null comment 'Description',
+                        ownerId int unsigned default 0 comment 'Owner ID',
+                        assigneeId int unsigned default 0 comment 'Assignee ID',
+                        watcherId varchar(1000) default '' comment 'Watcher ID',
+                        cover varchar(128) default '' comment 'Cover',
+                        priority int unsigned default 0 comment 'Priority',
+                        attachment varchar(128) default '' comment 'Attachment',
+                        type int unsigned default 0 comment 'Type',
+                        state int unsigned default 0 comment 'State',
+                        createdTime datetime not null comment 'Created Time',
+                        updatedTime datetime not null comment 'Updated Time',
+                        dueTime datetime not null comment 'Due Time',
+                        linkedTieketId int unsigned default 0 comment 'Linked Ticket ID',
+                        constraint fk_article_user foreign key (ownerId) references users(id)
+) comment 'Tickets';
