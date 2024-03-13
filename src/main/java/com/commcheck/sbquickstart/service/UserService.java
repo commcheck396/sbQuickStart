@@ -8,7 +8,12 @@ import org.apache.ibatis.annotations.Select;
 public interface UserService {
 
     User findByUsername(String username);
-
-
+    
     Result addUser(String username, String password);
+
+    void update(User user);
+
+    void updateAvatar(String avatarUrl);
+
+    void updatePassword(String encryptedNewPassword);
 }

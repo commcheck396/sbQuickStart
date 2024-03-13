@@ -1,17 +1,18 @@
 package com.commcheck.sbquickstart.controller;
 
-import com.commcheck.sbquickstart.pojo.Encrypter;
-import com.commcheck.sbquickstart.pojo.JWTUtil;
+import com.commcheck.sbquickstart.utils.Encrypter;
+import com.commcheck.sbquickstart.utils.JWTUtil;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.UserService;
+import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,7 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
     @PostMapping("/register")
     public Result register(@Pattern(regexp = "^[a-zA-Z0-9_]{5,16}$", message = "username format error...") String username,
                            @Pattern(regexp = "^[a-zA-Z0-9_]{5,16}$", message = "password format error...") String password) {
@@ -61,5 +63,54 @@ public class UserController {
             }
         }
     }
+
+    @GetMapping("/userInfo")
+    public Result<User> userInfo(@RequestHeader(name = "Authorization") String token){
+        Map<String, Object> map = JWTUtil.JWTVerification(token);
+        String username = (String) map.get("username");
+        System.out.println(username);
+        User user = userService.findByUsername(username);
+        return Result.success(user);
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody @Validated User user){
+        user.setUpdated_time(LocalDateTime.now());
+        System.out.println("updating user info...");
+        userService.update(user);
+        return Result.success();
+    }
+
+    @PatchMapping("/updateAvatar")
+    public Result updateAvatar(@RequestParam @URL String avatarUrl){
+        System.out.println("updating user avatar...");
+        userService.updateAvatar(avatarUrl);
+        return Result.success();
+    }
+
+    @PatchMapping("/updatePassword")
+    public Result updatePassword(@RequestBody Map<String, String> body){
+        String oldPassword = body.get("oldPassword");
+        String newPassword = body.get("newPassword");
+        String reTypePassword = body.get("reTypePassword");
+        if (oldPassword.isEmpty() || newPassword.isEmpty() || reTypePassword.isEmpty()){
+            return Result.fail("passwords cannot be empty...");
+        }
+        if(!newPassword.equals(reTypePassword)){
+            return Result.fail("passwords are not the same...");
+        }
+
+        Map<String, Object> map = ThreadLocalUtil.get();
+        String username = (String) map.get("username");
+        User user = userService.findByUsername(username);
+        String encryptedOldPassword = Encrypter.encrypt(oldPassword, "MD5");
+        if (!user.getPassword().equals(encryptedOldPassword)){
+            return Result.fail("old password error...");
+        }
+        String encryptedNewPassword = Encrypter.encrypt(newPassword, "MD5");
+        userService.updatePassword(encryptedNewPassword);
+        return Result.success();
+    }
+
 
 }

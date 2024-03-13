@@ -1,4 +1,4 @@
-package com.commcheck.sbquickstart.pojo;
+package com.commcheck.sbquickstart.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -20,7 +20,8 @@ public class JWTUtil {
     public static Map<String, Object> JWTVerification(String token) {
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256("commcheck")).build();
         DecodedJWT decodedJWT = jwtVerifier.verify(token);
-        Map<String, Object> claims = decodedJWT.getClaim("claims").asMap();
+        Map<String, Object> claims = decodedJWT.getClaim("user").asMap();
+        System.out.println(claims);
         return claims;
     }
 }

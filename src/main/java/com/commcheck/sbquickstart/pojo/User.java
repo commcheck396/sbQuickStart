@@ -1,5 +1,9 @@
 package com.commcheck.sbquickstart.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,8 +12,12 @@ import java.time.LocalDateTime;
 public class User {
     private Integer id;
     private String username;
+    @JsonIgnore
     private String password;
+    @NotEmpty
+    @Pattern(regexp = "^[a-zA-Z0-9_-]{3,16}$", message = "illinegal username")
     private String nickname;
+    @Email
     private String email;
     private String avatar;
     private Integer status;

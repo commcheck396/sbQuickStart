@@ -1,4 +1,4 @@
-package com.commcheck.sbquickstart.pojo;
+package com.commcheck.sbquickstart.utils;
 
 import lombok.Data;
 

@@ -1,6 +1,7 @@
 package com.commcheck.sbquickstart.interceptors;
 
-import com.commcheck.sbquickstart.pojo.JWTUtil;
+import com.commcheck.sbquickstart.utils.JWTUtil;
+import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
@@ -17,11 +18,17 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
         try {
             Map<String, Object> map = JWTUtil.JWTVerification(token);
-            System.out.println("user profile: " + map);
+            ThreadLocalUtil.set(map);
+//            System.out.println("user profile: " + map);
             return true;
         } catch (Exception e) {
             response.setStatus(401);
             return false;
         }
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        ThreadLocalUtil.remove();
     }
 }

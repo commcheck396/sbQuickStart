@@ -1,12 +1,15 @@
 package com.commcheck.sbquickstart.service.impl;
 
 import com.commcheck.sbquickstart.mapper.UserMapper;
-import com.commcheck.sbquickstart.pojo.Encrypter;
+import com.commcheck.sbquickstart.utils.Encrypter;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.UserService;
+import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,5 +33,22 @@ public class UserServiceImpl implements UserService {
         }
         System.out.println("add user success");
         return Result.success("add user to Mysql success");
+    }
+
+    @Override
+    public void update(User user) {
+        userMapper.update(user);
+    }
+
+    @Override
+    public void updateAvatar(String avatarUrl) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        userMapper.updateAvatar(avatarUrl, (Integer)map.get("id"));
+    }
+
+    @Override
+    public void updatePassword(String encryptedNewPassword) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        userMapper.updatePassword(encryptedNewPassword, (Integer)map.get("id"));
     }
 }

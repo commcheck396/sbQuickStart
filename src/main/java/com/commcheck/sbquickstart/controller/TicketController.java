@@ -1,14 +1,10 @@
 package com.commcheck.sbquickstart.controller;
 
-import com.commcheck.sbquickstart.pojo.JWTUtil;
 import com.commcheck.sbquickstart.pojo.Result;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/ticket")
