@@ -5,6 +5,7 @@ import com.commcheck.sbquickstart.utils.JWTUtil;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.UserService;
+import com.commcheck.sbquickstart.utils.SplitUtil;
 import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -109,6 +111,39 @@ public class UserController {
         }
         String encryptedNewPassword = Encrypter.encrypt(newPassword, "MD5");
         userService.updatePassword(encryptedNewPassword);
+        return Result.success();
+    }
+
+    @PostMapping("/joinGroup")
+    public Result joinGroup(@RequestParam String groupList){
+//        TODO: notify group admin or admin to approve
+        List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) map.get("id");
+        System.out.println("user "+ currentUserId + "apply to join group" + list);
+        return Result.success();
+    }
+
+    @PostMapping("/approveJoinGroup")
+    public Result approveJoinGroup(@RequestParam String groupList, @RequestParam Integer userId){
+//        TODO: allow group admin to approve
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) map.get("id");
+        User currentUser = userService.findById(currentUserId);
+        if (currentUser.getStatus() != 0){
+            return Result.fail("you don't have permission to this operation...");
+        }
+        List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
+        userService.addUserToGroup(list, userId);
+        return Result.success();
+    }
+
+    @PostMapping("/upgradeToAdminDirectly")
+    public Result upgradeToAdminDirectly(){
+//        TODO: delete this method
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) map.get("id");
+        userService.upgradeToRootAdmin(currentUserId);
         return Result.success();
     }
 

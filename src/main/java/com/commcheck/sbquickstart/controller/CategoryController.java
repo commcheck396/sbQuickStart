@@ -2,7 +2,10 @@ package com.commcheck.sbquickstart.controller;
 
 import com.commcheck.sbquickstart.pojo.Category;
 import com.commcheck.sbquickstart.pojo.Result;
+import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.CategoryService;
+import com.commcheck.sbquickstart.service.UserService;
+import com.commcheck.sbquickstart.utils.PermissionCheckingUtil;
 import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +19,9 @@ import java.util.Map;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private PermissionCheckingUtil permissionCheckingUtil;
 
     @PostMapping()
     public Result add(@RequestBody @Validated(Category.Add.class) Category category) {
@@ -42,9 +48,14 @@ public class CategoryController {
 
     @PutMapping()
     public Result update(@RequestBody @Validated Category category) {
+//        TODO: can be edited by the admin/owner/group member
         Integer categoryId = category.getId();
-        if (categoryService.findById(categoryId) == null){
+        Category currentCategory = categoryService.findById(categoryId);
+        if (currentCategory == null){
             return Result.fail("Category does not exist");
+        }
+        if (!permissionCheckingUtil.checkPermissionForCategory(currentCategory)){
+            return Result.fail("You do not have permission to edit this category");
         }
         if (categoryService.findByCategoryName(category.getCategoryName()) != null){
             return Result.fail("Category Name already exists");
@@ -55,14 +66,13 @@ public class CategoryController {
 
     @DeleteMapping()
     public Result delete(@RequestParam("id") Integer id) {
-        if (categoryService.findById(id) == null){
+//        TODO: can be edited by the admin/owner/group member
+        Category currentCategory = categoryService.findById(id);
+        if (currentCategory == null){
             return Result.fail("Category does not exist");
         }
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer currentUserId = (Integer) map.get("id");
-        Category currentCategory = categoryService.findById(id);
-        if (currentCategory.getOwnerId() != currentUserId){
-            return Result.fail("You do not have permission to delete this category");
+        if (!permissionCheckingUtil.checkPermissionForCategory(currentCategory)){
+            return Result.fail("You do not have permission to edit this category");
         }
         categoryService.deleteCategory(id);
         return Result.success();

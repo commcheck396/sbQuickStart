@@ -5,6 +5,8 @@ import com.commcheck.sbquickstart.pojo.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 public interface UserService {
 
     User findByUsername(String username);
@@ -16,4 +18,10 @@ public interface UserService {
     void updateAvatar(String avatarUrl);
 
     void updatePassword(String encryptedNewPassword);
+
+    User findById(Integer currentUserId);
+
+    void addUserToGroup(List<Integer> list, Integer userId);
+
+    void upgradeToRootAdmin(Integer userId);
 }

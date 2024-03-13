@@ -23,4 +23,5 @@ public class User {
     private Integer status;
     private LocalDateTime created_time;
     private LocalDateTime updated_time;
+    private String belongsTo;
 }

@@ -23,4 +23,13 @@ public interface UserMapper {
 
     @Update("update users set password = #{encryptedNewPassword}, updated_time = now() where id = #{id}")
     void updatePassword(String encryptedNewPassword, Integer id);
+
+    @Select("select * from users where id = #{currentUserId}")
+    User findById(Integer currentUserId);
+
+    @Update("update users set belongsTo = #{userGroup} where id = #{userId}")
+    void addUserToGroup(String userGroup, Integer userId);
+
+    @Update("update users set status = 0 where id = #{userId}")
+    void upgradeToRootAdmin(Integer userId);
 }

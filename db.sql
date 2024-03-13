@@ -2,6 +2,10 @@ create database sbQuickStart;
 
 use sbQuickStart;
 
+drop table category;
+drop table tickets;
+drop table users;
+
 create table users(
                       id int unsigned auto_increment primary key comment 'ID',
                       username varchar(20) not null unique comment 'Username',
@@ -9,7 +13,8 @@ create table users(
                       nickname varchar(20) default '' comment 'Nickname',
                       email varchar(100) unique comment 'Email',
                       avatar varchar(128) default '' comment 'Avatar',
-                      status int unsigned default 0 comment 'Status',
+                      status int unsigned default 5 comment 'Status',
+                      belongsTo varchar(64) comment 'Belongs To',
                       created_time datetime not null comment 'Created Time',
                       updated_time datetime not null comment 'Updated Time'
 ) comment 'Users';
@@ -30,6 +35,7 @@ create table tickets(
                         updatedTime datetime not null comment 'Updated Time',
                         dueTime datetime not null comment 'Due Time',
                         linkedTieketId int unsigned default 0 comment 'Linked Ticket ID',
+                        belongsTo varchar(64) comment 'Belongs To',
                         lastEditedBy int unsigned default 0 comment 'Last Edited By',
                         constraint fk_article_user foreign key (ownerId) references users(id)
 ) comment 'Tickets';
@@ -41,5 +47,6 @@ create table category(
                          ownerId int unsigned not null comment 'Owner ID',
                          createdTime datetime not null comment 'Created Time',
                          updatedTime datetime not null comment 'Updated Time',
+                         lastEditedBy int unsigned default 0 comment 'Last Edited By',
                          constraint fk_category_user foreign key (ownerId) references users(id)
 ) comment "Category";

@@ -42,6 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void updateCategory(Category category) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) map.get("id");
+        category.setLastEditedBy(currentUserId);
         categoryMapper.update(category);
     }
 

@@ -9,6 +9,7 @@ import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -50,5 +51,29 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(String encryptedNewPassword) {
         Map<String, Object> map = ThreadLocalUtil.get();
         userMapper.updatePassword(encryptedNewPassword, (Integer)map.get("id"));
+    }
+
+    @Override
+    public User findById(Integer currentUserId) {
+        return userMapper.findById(currentUserId);
+    }
+
+    @Override
+    public void addUserToGroup(List<Integer> list, Integer userId) {
+        User user = this.findById(userId);
+        String userGroup = user.getBelongsTo();
+        for (Integer groupId : list) {
+            if (userGroup == null){
+                userGroup = Integer.toString(groupId);
+                continue;
+            }
+            userGroup = userGroup + ";" + groupId;
+        }
+        userMapper.addUserToGroup(userGroup, userId);
+    }
+
+    @Override
+    public void upgradeToRootAdmin(Integer userId) {
+        userMapper.upgradeToRootAdmin(userId);
     }
 }

@@ -1,0 +1,200 @@
+
+POST http://localhost:8080/user/register
+Content-Type: application/x-www-form-urlencoded
+
+username = catTest2 &
+password = 123456
+
+<> 2024-03-14T003635.200.json
+<> 2024-03-14T003618.200.json
+<> 2024-03-13T174706.200.json
+
+###
+
+//GET http://localhost:8080/user/userInfo
+//Accept: application/json
+//Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAxODk1ODd9.LO2gl8YiqRnSJDf0t_04Z1Blh4zOIMstmM3-WpQ7Vlg
+
+<> 2024-03-11T211611.200.json
+<> 2024-03-11T210624.200.json
+<> 2024-03-11T210554.200.json
+<> 2024-03-11T210028.200.json
+<> 2024-03-11T205827.200.json
+<> 2024-03-11T205733.200.json
+<> 2024-03-11T205730.200.json
+<> 2024-03-11T205720.200.json
+<> 2024-03-11T165948.200.json
+<> 2024-03-11T165924.200.json
+<> 2024-03-11T165833.200.json
+<> 2024-03-11T165807.200.json
+<> 2024-03-11T165804.200.json
+<> 2024-03-11T164014.200.json
+<> 2024-03-11T163826.200.json
+<> 2024-03-11T163819.200.json
+
+###
+
+
+POST http://localhost:8080/user/login
+Content-Type: application/x-www-form-urlencoded
+
+username = catTest2 &
+password = 123456
+
+<> 2024-03-14T002823.200.json
+<> 2024-03-13T174713.200.json
+<> 2024-03-13T174633.200.json
+
+###
+
+
+PUT http://localhost:8080/user/update
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAyNTk2NjR9.wpBAwlCDvZfDMdPr4dX-lMa2g-wgZN3zhzepaQM-A3U
+
+{
+  "id": 1,
+  "username": "1",
+  "password": "12345",
+  "email": "cmck@qq.com",
+  "nickname": "cmck"
+}
+
+
+###
+PATCH http://localhost:8080/user/updateAvatar?avatarUrl=https://example.com/avatar.jpg
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAyNTk2NjR9.wpBAwlCDvZfDMdPr4dX-lMa2g-wgZN3zhzepaQM-A3U
+
+
+###
+PATCH http://localhost:8080/user/updatePassword
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAzMzYyNDR9.za_nMg5EnvdubQrhaLOOysQhV068cQlfVy9NNiqf5KA
+Content-Type: application/json
+
+{
+  "oldPassword": "123456",
+  "newPassword": "123456",
+  "reTypePassword": "123456"
+}
+
+###
+POST http://localhost:8080/category
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAzNTg0MTR9.TMktaXy3wLX1GlS5AK1YILGgoRu6GfWnqYiPFTq3ezY
+
+{
+  "categoryName": "cat7"
+}
+
+<> 2024-03-13T172716.200.json
+<> 2024-03-13T172708.200.json
+<> 2024-03-13T172516.200.json
+<> 2024-03-13T172446.200.json
+<> 2024-03-13T171524-1.200.json
+<> 2024-03-13T171524.200.json
+<> 2024-03-13T170307.200.json
+<> 2024-03-13T170254.500.json
+<> 2024-03-13T170201.200.json
+
+###
+GET http://localhost:8080/category
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAzNTg0MTR9.TMktaXy3wLX1GlS5AK1YILGgoRu6GfWnqYiPFTq3ezY
+
+###
+GET http://localhost:8080/category/detail?id=1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAzNTg0MTR9.TMktaXy3wLX1GlS5AK1YILGgoRu6GfWnqYiPFTq3ezY
+
+###
+PUT http://localhost:8080/category
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAzNTg0MTR9.TMktaXy3wLX1GlS5AK1YILGgoRu6GfWnqYiPFTq3ezY
+
+{
+  "id": 1,
+  "categoryName": "ca5",
+  "categoryDetail": "cat1 desc"
+}
+
+<> 2024-03-13T172755.200.json
+<> 2024-03-13T172720.200.json
+<> 2024-03-13T172527.200.json
+<> 2024-03-13T172458.200.json
+<> 2024-03-13T172454.200.json
+<> 2024-03-13T171516.200.json
+<> 2024-03-13T171515.200.json
+<> 2024-03-13T171512.200.json
+<> 2024-03-13T171511.200.json
+<> 2024-03-13T171504.200.json
+<> 2024-03-13T171502.200.json
+<> 2024-03-13T170726.200.json
+<> 2024-03-13T170142.500.json
+<> 2024-03-13T165720.500.json
+<> 2024-03-13T165407.500.json
+<> 2024-03-13T165400.200.json
+<> 2024-03-13T165358.200.json
+<> 2024-03-13T165353.200.json
+<> 2024-03-13T165349.200.json
+<> 2024-03-13T165343.200.json
+<> 2024-03-13T165319.500.json
+<> 2024-03-13T165212.200.json
+
+###
+DELETE http://localhost:8080/category?id=2
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyMCwidXNlcm5hbWUiOiJjbWNrY21jayJ9LCJleHAiOjE3MTA3NTUyMzN9.0LLBC40Vahx4iV9IEVZXWT5AhYA7fvvlkJG_5hTgDIg
+
+<> 2024-03-13T174735.200.json
+<> 2024-03-13T174731.200.json
+<> 2024-03-13T174608.200.json
+<> 2024-03-13T174544.200.json
+###
+
+POST http://localhost:8080/user/upgradeToAdminDirectly
+Content-Type: application/x-www-form-urlencoded
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNtY2tjbWNrIn0sImV4cCI6MTcxMDc3OTMwM30.XvFh9l-UQKq6hFINQfmanzNdghRk5dbvoKw7kc-pJls
+
+<> 2024-03-14T003035.200.json
+<> 2024-03-14T002913.200.json
+
+###
+POST http://localhost:8080/user/approveJoinGroup?groupList=4&userId=3
+Content-Type: application/x-www-form-urlencoded
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNtY2tjbWNrIn0sImV4cCI6MTcxMDc3OTMwM30.XvFh9l-UQKq6hFINQfmanzNdghRk5dbvoKw7kc-pJls
+
+<> 2024-03-14T003600.200.json
+<> 2024-03-14T003554.200.json
+<> 2024-03-14T003511.200.json
+<> 2024-03-14T003406.200.json
+<> 2024-03-14T003329.200.json
+
+###
+POST http://localhost:8080/user/joinGroup?groupList=4
+Content-Type: application/x-www-form-urlencoded
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNtY2tjbWNrIn0sImV4cCI6MTcxMDc3OTMwM30.XvFh9l-UQKq6hFINQfmanzNdghRk5dbvoKw7kc-pJls
+
+###
+POST http://localhost:8080/category
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJ1c2VybmFtZSI6ImNhdFRlc3QifSwiZXhwIjoxNzEwNzgxNjI3fQ.dugmTM7MYGGR9uPewXhy9vA7IpMG3hVGq_gzacpf9Ns
+
+{
+  "categoryName": "cat3"
+}
+
+###
+PUT http://localhost:8080/category
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1LCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDc4Mzk1M30.9ckUqZyEdMmAiSHGPK4ECAygdlku2lqC0xeV2WSkues
+
+{
+  "id": 2,
+  "categoryName": "ca2",
+  "categoryDetail": "cat1 desc"
+}
+
+###
+DELETE http://localhost:8080/category?id=2
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNtY2tjbWNrIn0sImV4cCI6MTcxMDc3OTMwM30.XvFh9l-UQKq6hFINQfmanzNdghRk5dbvoKw7kc-pJls
