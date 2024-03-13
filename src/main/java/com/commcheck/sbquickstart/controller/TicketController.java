@@ -17,13 +17,6 @@ public class TicketController {
 
     @GetMapping("/list")
     public Result<String> list() {
-//        try {
-//            Map<String, Object> map = JWTUtil.JWTVerification(token);
-//            System.out.println("user profile: " + map);
-//        } catch (Exception e) {
-//            response.setStatus(401);
-//            throw new RuntimeException(e);
-//        }
         return Result.success("Ticket List");
     }
 }

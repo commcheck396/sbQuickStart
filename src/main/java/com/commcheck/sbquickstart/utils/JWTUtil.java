@@ -13,7 +13,7 @@ import java.util.Map;
 public class JWTUtil {
     public static String JWTGeneration(Map<String, Object> claims) {
         String token = JWT.create().withClaim("user", claims)
-                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60*12))
+                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60*120))
                 .sign(Algorithm.HMAC256("commcheck"));
         return token;
     }

@@ -39,4 +39,5 @@ public class Ticket {
     private String updatedTime;
     private String dueTime;
     private Integer linkedTicketId;
+    private String lastEditedBy;
 }

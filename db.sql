@@ -30,5 +30,16 @@ create table tickets(
                         updatedTime datetime not null comment 'Updated Time',
                         dueTime datetime not null comment 'Due Time',
                         linkedTieketId int unsigned default 0 comment 'Linked Ticket ID',
+                        lastEditedBy int unsigned default 0 comment 'Last Edited By',
                         constraint fk_article_user foreign key (ownerId) references users(id)
 ) comment 'Tickets';
+
+create table category(
+                         id int unsigned primary key auto_increment comment 'ID',
+                         categoryName varchar(32) not null unique comment 'Category Name',
+                         categoryDetail varchar(100) comment 'Category Detail',
+                         ownerId int unsigned not null comment 'Owner ID',
+                         createdTime datetime not null comment 'Created Time',
+                         updatedTime datetime not null comment 'Updated Time',
+                         constraint fk_category_user foreign key (ownerId) references users(id)
+) comment "Category";
