@@ -16,6 +16,8 @@ public class Category {
     private String categoryName;
     private String categoryDetail;
     private Integer ownerId;
+    private String groupAdmin;
+    private String member;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createdTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

@@ -45,6 +45,8 @@ create table category(
                          categoryName varchar(32) not null unique comment 'Category Name',
                          categoryDetail varchar(100) comment 'Category Detail',
                          ownerId int unsigned not null comment 'Owner ID',
+                         member varchar(1000) default '' comment 'Member',
+                         groupAdmin varchar(1000) default '' comment 'Group Admin',
                          createdTime datetime not null comment 'Created Time',
                          updatedTime datetime not null comment 'Updated Time',
                          lastEditedBy int unsigned default 0 comment 'Last Edited By',

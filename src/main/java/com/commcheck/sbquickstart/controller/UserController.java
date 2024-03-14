@@ -1,12 +1,9 @@
 package com.commcheck.sbquickstart.controller;
 
-import com.commcheck.sbquickstart.utils.Encrypter;
-import com.commcheck.sbquickstart.utils.JWTUtil;
+import com.commcheck.sbquickstart.utils.*;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.UserService;
-import com.commcheck.sbquickstart.utils.SplitUtil;
-import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,9 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PermissionCheckingUtil permissionCheckingUtil;
 
     @PostMapping("/register")
     public Result register(@Pattern(regexp = "^[a-zA-Z0-9_]{5,16}$", message = "username format error...") String username,
@@ -114,8 +114,8 @@ public class UserController {
         return Result.success();
     }
 
-    @PostMapping("/joinGroup")
-    public Result joinGroup(@RequestParam String groupList){
+    @PostMapping("/joinGroupRequest")
+    public Result joinGroupRequest(@RequestParam String groupList){
 //        TODO: notify group admin or admin to approve
         List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
         Map<String, Object> map = ThreadLocalUtil.get();
@@ -124,19 +124,44 @@ public class UserController {
         return Result.success();
     }
 
-    @PostMapping("/approveJoinGroup")
-    public Result approveJoinGroup(@RequestParam String groupList, @RequestParam Integer userId){
-//        TODO: allow group admin to approve
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer currentUserId = (Integer) map.get("id");
-        User currentUser = userService.findById(currentUserId);
-        if (currentUser.getStatus() != 0){
-            return Result.fail("you don't have permission to this operation...");
+    @PostMapping("/rootAdminRequest")
+    public Result adminRequest(){
+//        TODO: notify root admin to approve
+        if (permissionCheckingUtil.isRootAdmin()){
+            return Result.fail("you are already an admin...");
         }
-        List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
-        userService.addUserToGroup(list, userId);
         return Result.success();
     }
+
+    @PostMapping("/groupAdminRequest")
+    public Result groupAdminRequest(@RequestParam Integer groupId){
+//        TODO: notify admin to approve
+        return Result.success();
+    }
+
+    @PostMapping("/approveRootAdminRequest")
+    public Result approveAdminRequest(@RequestParam Integer userId){
+        if(!permissionCheckingUtil.isRootAdmin()){
+            return Result.fail("you don't have permission to this operation...");
+        }
+        userService.upgradeToRootAdmin(userId);
+        return Result.success();
+    }
+
+//    @PostMapping("/approveJoinGroup")
+//    public Result approveJoinGroup(@RequestParam String groupList, @RequestParam Integer userId){
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        User currentUser = userService.findById(currentUserId);
+//        if (currentUser.getStatus() != 0){
+//            return Result.fail("you don't have permission to this operation...");
+//        }
+//        List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
+//        userService.addUserToGroup(list, userId);
+//        return Result.success();
+//    }
+
+
 
     @PostMapping("/upgradeToAdminDirectly")
     public Result upgradeToAdminDirectly(){

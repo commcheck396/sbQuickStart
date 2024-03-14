@@ -10,8 +10,8 @@ public interface CategoryMapper {
     @Select("SELECT * FROM category WHERE categoryName = #{categoryName}")
     Category findByCategoryName(String categoryName);
 
-    @Insert("insert into category (categoryName, categoryDetail, ownerId, createdTime, updatedTime, lastEditedBy)" +
-            "values (#{categoryName}, #{categoryDetail}, #{ownerId}, now(), now(), #{ownerId})")
+    @Insert("insert into category (categoryName, categoryDetail, ownerId, createdTime, updatedTime, lastEditedBy, groupAdmin, member)" +
+            "values (#{categoryName}, #{categoryDetail}, #{ownerId}, now(), now(), #{ownerId}, #{ownerId}, #{ownerId})")
     void add(Category category);
 
     @Select("select * from category where ownerId = #{currentUserId}")
@@ -25,4 +25,16 @@ public interface CategoryMapper {
 
     @Delete("DELETE FROM category WHERE id = #{id}")
     void deleteCategory(Integer id);
+
+    @Update("update category set member = #{member}, lastEditedBy = #{lastEditedBy} where id = #{id}")
+    void addUserToGroup(Category category);
+
+    @Update("update category set groupAdmin = #{groupAdmin}, lastEditedBy = #{lastEditedBy} where id = #{id}")
+    void upgradeUserToGroupAdmin(Category category);
+
+    @Update("update category set member = #{member}, groupAdmin = #{groupAdmin}, lastEditedBy = #{lastEditedBy} where id = #{id}")
+    void exitGroup(Category category);
+
+    @Update("update category set ownerId = #{ownerId}, groupAdmin = #{groupAdmin}, lastEditedBy = #{lastEditedBy} where id = #{id}")
+    void transferGroupOwnership(Category category);
 }

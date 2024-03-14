@@ -2,7 +2,7 @@
 POST http://localhost:8080/user/register
 Content-Type: application/x-www-form-urlencoded
 
-username = catTest2 &
+username = catTest4 &
 password = 123456
 
 <> 2024-03-14T003635.200.json
@@ -177,10 +177,11 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2Vy
 ###
 POST http://localhost:8080/category
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo0LCJ1c2VybmFtZSI6ImNhdFRlc3QifSwiZXhwIjoxNzEwNzgxNjI3fQ.dugmTM7MYGGR9uPewXhy9vA7IpMG3hVGq_gzacpf9Ns
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgxNDM4MX0.zcC1jPyuJRSurY39mkXyNm2jsmNSltRuNf5nQXrHFxo
+#Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QxIn0sImV4cCI6MTcxMDgxMjI3OH0.A6osyFrlOQwXrizYHr51eO9eNj9tPcbjPsBTto7Fwvs
 
 {
-  "categoryName": "cat3"
+  "categoryName": "cat7"
 }
 
 ###
@@ -198,3 +199,23 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1LCJ1c2Vy
 DELETE http://localhost:8080/category?id=2
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNtY2tjbWNrIn0sImV4cCI6MTcxMDc3OTMwM30.XvFh9l-UQKq6hFINQfmanzNdghRk5dbvoKw7kc-pJls
+
+###
+POST http://localhost:8080/category/approveJoinGroup?groupList=7&userId=6
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgxNDM4MX0.zcC1jPyuJRSurY39mkXyNm2jsmNSltRuNf5nQXrHFxo
+
+###
+POST http://localhost:8080/category/approveUpgradeToGroupAdmin?groupList=7&userId=5
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgxNDM4MX0.zcC1jPyuJRSurY39mkXyNm2jsmNSltRuNf5nQXrHFxo
+
+###
+POST http://localhost:8080/category/exitGroup?groupList=7
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1LCJ1c2VybmFtZSI6ImNhdFRlc3Q0In0sImV4cCI6MTcxMDgzMzAyOX0.Pw8cQxiS1IFMeTRbIcjMxJmhxWAMlFt_G36vqzzTCBg
+
+###
+POST http://localhost:8080/category/transferGroupOwnership?groupId=17&newOwnerId=1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgzNzE3Mn0.z5_p1ySvH9-URXjqons0JJILLJzDb_2X4Jr1dS6TVS0
