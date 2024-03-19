@@ -1,12 +1,17 @@
 package com.commcheck.sbquickstart.utils;
 
+import com.commcheck.sbquickstart.mapper.TicketTicketMapper;
 import com.commcheck.sbquickstart.pojo.Category;
+import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.CategoryService;
+import com.commcheck.sbquickstart.service.TicketService;
 import com.commcheck.sbquickstart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.awt.print.PrinterGraphics;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -16,6 +21,13 @@ public class PermissionCheckingUtil {
 
     @Autowired
     public CategoryService categoryService;
+
+    @Autowired
+    public TicketService ticketService;
+
+    @Autowired
+    public TicketTicketMapper ticketTicketMapper;
+
 
 
     public boolean isRootAdmin(){
@@ -83,5 +95,39 @@ public class PermissionCheckingUtil {
                 isGroupAdmin(category.getId());
     }
 
+    public boolean checkEditPermissionForTicket(Integer ticketId) {
+        return true;
+    }
+    public boolean checkReadPermissionForTicket(Integer ticketId) {
+        return true;
+    }
 
+    public boolean checkReadPermissionForTicket(Integer ticketId, Integer userId) {
+        return true;
+    }
+
+    public boolean isGroupExist(Integer groupId){
+        return categoryService.findById(groupId) != null;
+    }
+
+    public Integer getCurrentUserId(){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        return (Integer) map.get("id");
+    }
+
+    public boolean isTicketExist(Integer ticketId){
+         return ticketService.findById(ticketId) != null;
+    }
+
+
+
+    public List<Ticket> filterViewableTickets(List<Ticket> tickets) {
+        List<Ticket> viewableTickets = tickets;
+        for (Ticket ticket : tickets) {
+            if (!checkReadPermissionForTicket(ticket.getId())) {
+                viewableTickets.remove(ticket);
+            }
+        }
+        return viewableTickets;
+    }
 }

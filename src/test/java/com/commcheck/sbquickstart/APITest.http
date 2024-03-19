@@ -1,8 +1,11 @@
 
+
+###
+
 POST http://localhost:8080/user/register
 Content-Type: application/x-www-form-urlencoded
 
-username = catTest4 &
+username = tabtest5 &
 password = 123456
 
 <> 2024-03-14T003635.200.json
@@ -38,7 +41,7 @@ password = 123456
 POST http://localhost:8080/user/login
 Content-Type: application/x-www-form-urlencoded
 
-username = catTest2 &
+username = tabtest1 &
 password = 123456
 
 <> 2024-03-14T002823.200.json
@@ -80,7 +83,7 @@ Content-Type: application/json
 ###
 POST http://localhost:8080/category
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxOSwidXNlcm5hbWUiOiIxMTExMTExMSJ9LCJleHAiOjE3MTAzNTg0MTR9.TMktaXy3wLX1GlS5AK1YILGgoRu6GfWnqYiPFTq3ezY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNhdFRlc3QzIn0sImV4cCI6MTcxMTIwNzExNn0.fRd5wXUM--MhEP8AXpCnZohNeZ_-FMeK_EzFChEp5f4
 
 {
   "categoryName": "cat7"
@@ -177,11 +180,11 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2Vy
 ###
 POST http://localhost:8080/category
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgxNDM4MX0.zcC1jPyuJRSurY39mkXyNm2jsmNSltRuNf5nQXrHFxo
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6InRhYnRlc3QxIn0sImV4cCI6MTcxMTI0NjIxMH0.I_834-YsmYMzxrFiPkeVJMCl6mBeKekurY722NIk50s
 #Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QxIn0sImV4cCI6MTcxMDgxMjI3OH0.A6osyFrlOQwXrizYHr51eO9eNj9tPcbjPsBTto7Fwvs
 
 {
-  "categoryName": "cat7"
+  "categoryName": "cat3"
 }
 
 ###
@@ -219,3 +222,78 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1LCJ1c2Vy
 POST http://localhost:8080/category/transferGroupOwnership?groupId=17&newOwnerId=1
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgzNzE3Mn0.z5_p1ySvH9-URXjqons0JJILLJzDb_2X4Jr1dS6TVS0
+
+###
+POST http://localhost:8080/upload
+Content-Type: multipart/form-data
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgzNzE3Mn0.z5_p1ySvH9-URXjqons0JJILLJzDb_2X4Jr1dS6TVS0
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="/home/commcheck/IdeaProjects/sbQuickStart/githubLogo.png"
+Content-Type: image/jpeg
+
+@/home/commcheck/IdeaProjects/sbQuickStart/githubLogo.png
+--boundary--
+
+###
+POST http://localhost:8080/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMDgzNzE3Mn0.z5_p1ySvH9-URXjqons0JJILLJzDb_2X4Jr1dS6TVS0
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="githubLogo.png"
+
+< /home/commcheck/IdeaProjects/sbQuickStart/githubLogo.png
+--WebAppBoundary--
+
+###
+
+
+POST http://localhost:8080/ticket/addTicket
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNhdFRlc3QzIn0sImV4cCI6MTcxMTIwNzExNn0.fRd5wXUM--MhEP8AXpCnZohNeZ_-FMeK_EzFChEp5f4
+
+{
+  "title": "test5",
+  "description": "hahah",
+  "assigneeId": 5,
+  "dueTime": "4",
+  "belongsTo": 5
+}
+
+###
+POST http://localhost:8080/ticket/modifyPriority?ticketId=3&priority=3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNhdFRlc3QzIn0sImV4cCI6MTcxMTIwNzExNn0.fRd5wXUM--MhEP8AXpCnZohNeZ_-FMeK_EzFChEp5f4
+
+###
+POST http://localhost:8080/ticket/addWatcher?ticketId=3&userIds=4;3;2;1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNhdFRlc3QzIn0sImV4cCI6MTcxMTIwNzExNn0.fRd5wXUM--MhEP8AXpCnZohNeZ_-FMeK_EzFChEp5f4
+
+###
+POST http://localhost:8080/ticket/removeWatcher?ticketId=3&userIds=2;1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNhdFRlc3QzIn0sImV4cCI6MTcxMTIwNzExNn0.fRd5wXUM--MhEP8AXpCnZohNeZ_-FMeK_EzFChEp5f4
+###
+POST http://localhost:8080/ticket/watchTicket?ticketId=1
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMTIwNzg4N30.Sd6f6J92gMt8KcrDa3sBCxWYalsU0QdVleZhvHJCsMQ
+###
+GET http://localhost:8080/ticket/getWatchers?ticketId=3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMTIwNzg4N30.Sd6f6J92gMt8KcrDa3sBCxWYalsU0QdVleZhvHJCsMQ
+###
+GET http://localhost:8080/ticket/getTicketByWatcher?watcherId=3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMTIwNzg4N30.Sd6f6J92gMt8KcrDa3sBCxWYalsU0QdVleZhvHJCsMQ
+
+###
+POST http://localhost:8080/ticket/addLink?ticketId1=2&ticketId2=4
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMTIwNzg4N30.Sd6f6J92gMt8KcrDa3sBCxWYalsU0QdVleZhvHJCsMQ
+###
+
+GET http://localhost:8080/ticket/getLinkedTickets?ticketId=2
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdFRlc3QyIn0sImV4cCI6MTcxMTIwNzg4N30.Sd6f6J92gMt8KcrDa3sBCxWYalsU0QdVleZhvHJCsMQ

@@ -20,18 +20,26 @@ package com.commcheck.sbquickstart.pojo;
 //        constraint fk_article_user foreign key (owner_id) references users(id)
 //        ) comment 'Tickets';
 
+import com.commcheck.sbquickstart.anno.URL;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
 public class Ticket {
     private Integer id;
+    @NotEmpty
+    @Pattern(regexp = "^[a-zA-Z0-9]{1,100}$", message = "Title must be 1-100 characters long and only contain letters and numbers.")
     private String title;
+    @NotEmpty
     private String description;
     private Integer ownerId;
     private Integer assigneeId;
     private String watcherId;
-    private String cover;
+    @URL
+    private String image;
     private Integer priority;
+    @URL
     private String attachment;
     private Integer type;
     private Integer state;
@@ -39,5 +47,7 @@ public class Ticket {
     private String updatedTime;
     private String dueTime;
     private Integer linkedTicketId;
-    private String lastEditedBy;
+    private Integer lastEditedBy;
+    @NotEmpty
+    private Integer belongsTo;
 }
