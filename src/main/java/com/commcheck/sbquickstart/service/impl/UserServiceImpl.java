@@ -1,6 +1,8 @@
 package com.commcheck.sbquickstart.service.impl;
 
-import com.commcheck.sbquickstart.mapper.UserMapper;
+import com.commcheck.sbquickstart.mapper.*;
+import com.commcheck.sbquickstart.pojo.Category;
+import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.utils.Encrypter;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
@@ -9,6 +11,7 @@ import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +19,14 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
+    @Autowired
+    private TicketMapper ticketMapper;
+    @Autowired
+    private UserCategoryMapper userCategoryMapper;
+    @Autowired
+    private AdminCategoryMapper adminCategoryMapper;
 //    @Select("select * from users where username = #{username}")
     @Override
     public User findByUsername(String username) {
@@ -75,5 +86,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public void upgradeToRootAdmin(Integer userId) {
         userMapper.upgradeToRootAdmin(userId);
+    }
+
+    @Override
+    public List<Category> groupsIJioned(Integer currentUserId) {
+        List<Integer> groupIds = userCategoryMapper.groupsIJioned(currentUserId);
+        List<Category> categories = new ArrayList<>();
+        for (Integer groupId : groupIds) {
+            categories.add(categoryMapper.findById(groupId));
+        }
+        return categories;
+    }
+
+    @Override
+    public List<Category> groupsIAdmin(Integer currentUserId) {
+        List<Integer> groupIds = adminCategoryMapper.groupsIAdmin(currentUserId);
+        List<Category> categories = new ArrayList<>();
+        for (Integer groupId : groupIds) {
+            categories.add(categoryMapper.findById(groupId));
+        }
+        return categories;
+    }
+
+    @Override
+    public List<Ticket> ticketsICreated(Integer currentUserId) {
+        List<Ticket> tickets = ticketMapper.findByOwnerId(currentUserId);
+        return tickets;
     }
 }

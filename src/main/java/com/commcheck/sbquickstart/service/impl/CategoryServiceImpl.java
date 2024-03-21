@@ -1,6 +1,9 @@
 package com.commcheck.sbquickstart.service.impl;
 
+import com.commcheck.sbquickstart.mapper.AdminCategoryMapper;
 import com.commcheck.sbquickstart.mapper.CategoryMapper;
+import com.commcheck.sbquickstart.mapper.UserCategoryMapper;
+import com.commcheck.sbquickstart.mapper.UserMapper;
 import com.commcheck.sbquickstart.pojo.Category;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.CategoryService;
@@ -10,6 +13,7 @@ import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.lang.reflect.Member;
 import java.util.*;
 
@@ -17,6 +21,15 @@ import java.util.*;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private UserCategoryMapper userCategoryMapper;
+
+    @Autowired
+    private AdminCategoryMapper adminCategoryMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Override
@@ -30,6 +43,8 @@ public class CategoryServiceImpl implements CategoryService {
         Integer currentUserId = (Integer) map.get("id");
         category.setOwnerId(currentUserId);
         categoryMapper.add(category);
+        userCategoryMapper.addRelation(currentUserId, category.getId());
+        adminCategoryMapper.addAdminRelation(currentUserId, category.getId());
     }
 
     @Override
@@ -57,146 +72,274 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.deleteCategory(id);
     }
 
+//    @Override
+//    public void addUserToGroup(Integer groupId, Integer userId) {
+//        Category category = categoryMapper.findById(groupId);
+//        String memberIds = category.getMember();
+//        if (memberIds == null || memberIds.equals("")) {
+//            memberIds = userId.toString();
+//        } else {
+//            if (memberIds.contains(userId.toString())) {
+//                System.out.println("User already in the group.");
+//                return;
+//            }
+//            memberIds = memberIds + ";" + userId;
+//        }
+//        category.setMember(memberIds);
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        category.setLastEditedBy(currentUserId);
+//        categoryMapper.addUserToGroup(category);
+//    }
+
     @Override
     public void addUserToGroup(Integer groupId, Integer userId) {
-        Category category = categoryMapper.findById(groupId);
-        String memberIds = category.getMember();
-        if (memberIds == null || memberIds.equals("")) {
-            memberIds = userId.toString();
-        } else {
-            if (memberIds.contains(userId.toString())) {
-                System.out.println("User already in the group.");
-                return;
-            }
-            memberIds = memberIds + ";" + userId;
-        }
-        category.setMember(memberIds);
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer currentUserId = (Integer) map.get("id");
-        category.setLastEditedBy(currentUserId);
-        categoryMapper.addUserToGroup(category);
+        userCategoryMapper.addRelation(userId, groupId);
+        this.updateEditRecord(groupId);
     }
+
+//    @Override
+//    public void upgradeUserToGroupAdmin(Integer groupId, Integer userId) {
+//        Category category = categoryMapper.findById(groupId);
+//        String adminIds = category.getGroupAdmin();
+//        if (adminIds == null || adminIds.equals("")) {
+//            adminIds = userId.toString();
+//        } else {
+//            if (adminIds.contains(userId.toString())) {
+//                System.out.println("User already as group admin.");
+//                return;
+//            }
+//            adminIds = adminIds + ";" + userId;
+//        }
+//        category.setGroupAdmin(adminIds);
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        category.setLastEditedBy(currentUserId);
+//        categoryMapper.upgradeUserToGroupAdmin(category);
+//    }
 
     @Override
     public void upgradeUserToGroupAdmin(Integer groupId, Integer userId) {
-        Category category = categoryMapper.findById(groupId);
-        String adminIds = category.getGroupAdmin();
-        if (adminIds == null || adminIds.equals("")) {
-            adminIds = userId.toString();
-        } else {
-            if (adminIds.contains(userId.toString())) {
-                System.out.println("User already as group admin.");
-                return;
-            }
-            adminIds = adminIds + ";" + userId;
-        }
-        category.setGroupAdmin(adminIds);
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer currentUserId = (Integer) map.get("id");
-        category.setLastEditedBy(currentUserId);
-        categoryMapper.upgradeUserToGroupAdmin(category);
+        adminCategoryMapper.addAdminRelation(userId, groupId);
+        this.updateEditRecord(groupId);
+
     }
+
+//    @Override
+//    public void exitGroup(Integer groupId) {
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        Category category = categoryMapper.findById(groupId);
+//        List<String> memberIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getMember()));
+//        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
+//        boolean flag = false;
+//        if (memberIds.contains(Integer.toString(currentUserId))) {
+//            memberIds.remove(Integer.toString(currentUserId));
+//            String newMemberIds = String.join(";", memberIds);
+//            category.setMember(newMemberIds);
+//            flag = true;
+//        }
+//        else {
+//            System.out.println("User not in the group.");
+//        }
+//        if (groupAdminIds.contains(Integer.toString(currentUserId))) {
+//            groupAdminIds.remove(Integer.toString(currentUserId));
+//            String newGroupAdminIds = String.join(";", groupAdminIds);
+//            category.setGroupAdmin(newGroupAdminIds);
+//            flag = true;
+//        }
+//        else{
+//            System.out.println("User not as group admin.");
+//        }
+//        if (flag){
+//            category.setLastEditedBy(currentUserId);
+//            categoryMapper.exitGroup(category);
+//        }
+//        else{
+//            System.out.println("User not in the group or as group admin.");
+//        }
+//    }
 
     @Override
     public void exitGroup(Integer groupId) {
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        Category category = categoryMapper.findById(groupId);
-        List<String> memberIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getMember()));
-        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
-        boolean flag = false;
-        if (memberIds.contains(Integer.toString(currentUserId))) {
-            memberIds.remove(Integer.toString(currentUserId));
-            String newMemberIds = String.join(";", memberIds);
-            category.setMember(newMemberIds);
-            flag = true;
+        if (userCategoryMapper.isUserInGroup(currentUserId, groupId) >= 1) {
+            userCategoryMapper.deleteRelation(currentUserId, groupId);
+            this.updateEditRecord(groupId);
         }
         else {
             System.out.println("User not in the group.");
         }
-        if (groupAdminIds.contains(Integer.toString(currentUserId))) {
-            groupAdminIds.remove(Integer.toString(currentUserId));
-            String newGroupAdminIds = String.join(";", groupAdminIds);
-            category.setGroupAdmin(newGroupAdminIds);
-            flag = true;
+        if (adminCategoryMapper.isAdminInGroup(currentUserId, groupId) >= 1) {
+            adminCategoryMapper.deleteAdminRelation(currentUserId, groupId);
+            this.updateEditRecord(groupId);
         }
-        else{
+        else {
             System.out.println("User not as group admin.");
         }
-        if (flag){
-            category.setLastEditedBy(currentUserId);
-            categoryMapper.exitGroup(category);
-        }
-        else{
-            System.out.println("User not in the group or as group admin.");
-        }
+
     }
+
+//    @Override
+//    public void transferGroupOwnership(Integer groupId, Integer newOwnerId) {
+//        Category category = categoryMapper.findById(groupId);
+//        Integer oldOwnerId = category.getOwnerId();
+//        category.setOwnerId(newOwnerId);
+//        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
+//        groupAdminIds.remove(Integer.toString(oldOwnerId));
+//        groupAdminIds.add(Integer.toString(newOwnerId));
+//        String newGroupAdminIds = String.join(";", groupAdminIds);
+//        category.setGroupAdmin(newGroupAdminIds);
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        category.setLastEditedBy(currentUserId);
+//        categoryMapper.transferGroupOwnership(category);
+//    }
 
     @Override
     public void transferGroupOwnership(Integer groupId, Integer newOwnerId) {
         Category category = categoryMapper.findById(groupId);
         Integer oldOwnerId = category.getOwnerId();
         category.setOwnerId(newOwnerId);
-        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
-        groupAdminIds.remove(Integer.toString(oldOwnerId));
-        groupAdminIds.add(Integer.toString(newOwnerId));
-        String newGroupAdminIds = String.join(";", groupAdminIds);
-        category.setGroupAdmin(newGroupAdminIds);
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer currentUserId = (Integer) map.get("id");
-        category.setLastEditedBy(currentUserId);
-        categoryMapper.transferGroupOwnership(category);
+        categoryMapper.setNewOwner(category);
+        if (adminCategoryMapper.isAdminInGroup(oldOwnerId, groupId) >= 1) {
+            adminCategoryMapper.deleteAdminRelation(oldOwnerId, groupId);
+            adminCategoryMapper.addAdminRelation(newOwnerId, groupId);
+        }
+        this.updateEditRecord(groupId);
     }
+
+//    @Override
+//    public void removeUserFromGroup(Integer groupId, Integer currentUserId) {
+//        Category category = categoryMapper.findById(groupId);
+//        List<String> memberIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getMember()));
+//        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
+//        boolean flag = false;
+//        if (memberIds.contains(Integer.toString(currentUserId))) {
+//            memberIds.remove(Integer.toString(currentUserId));
+//            String newMemberIds = String.join(";", memberIds);
+//            category.setMember(newMemberIds);
+//            flag = true;
+//        }
+//        else {
+//            System.out.println("User not in the group.");
+//        }
+//        if (groupAdminIds.contains(Integer.toString(currentUserId))) {
+//            groupAdminIds.remove(Integer.toString(currentUserId));
+//            String newGroupAdminIds = String.join(";", groupAdminIds);
+//            category.setGroupAdmin(newGroupAdminIds);
+//            flag = true;
+//        }
+//        else{
+//            System.out.println("User not as group admin.");
+//        }
+//        if (flag){
+//            category.setLastEditedBy(currentUserId);
+//            categoryMapper.exitGroup(category);
+//        }
+//        else{
+//            System.out.println("User not in the group or as group admin.");
+//        }
+//    }
 
     @Override
     public void removeUserFromGroup(Integer groupId, Integer currentUserId) {
-        Category category = categoryMapper.findById(groupId);
-        List<String> memberIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getMember()));
-        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
-        boolean flag = false;
-        if (memberIds.contains(Integer.toString(currentUserId))) {
-            memberIds.remove(Integer.toString(currentUserId));
-            String newMemberIds = String.join(";", memberIds);
-            category.setMember(newMemberIds);
-            flag = true;
+        if (userCategoryMapper.isUserInGroup(currentUserId, groupId) >= 1) {
+            userCategoryMapper.deleteRelation(currentUserId, groupId);
+            this.updateEditRecord(groupId);
         }
         else {
             System.out.println("User not in the group.");
         }
-        if (groupAdminIds.contains(Integer.toString(currentUserId))) {
-            groupAdminIds.remove(Integer.toString(currentUserId));
-            String newGroupAdminIds = String.join(";", groupAdminIds);
-            category.setGroupAdmin(newGroupAdminIds);
-            flag = true;
+        if (adminCategoryMapper.isAdminInGroup(currentUserId, groupId) >= 1) {
+            adminCategoryMapper.deleteAdminRelation(currentUserId, groupId);
+            this.updateEditRecord(groupId);
         }
-        else{
+        else {
             System.out.println("User not as group admin.");
         }
-        if (flag){
-            category.setLastEditedBy(currentUserId);
-            categoryMapper.exitGroup(category);
+    }
+
+//    @Override
+//    public void removeGroupAdmin(Integer groupId, Integer userId) {
+//        Category category = categoryMapper.findById(groupId);
+//        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
+//        if (groupAdminIds.contains(Integer.toString(userId))) {
+//            groupAdminIds.remove(Integer.toString(userId));
+//            String newGroupAdminIds = String.join(";", groupAdminIds);
+//            category.setGroupAdmin(newGroupAdminIds);
+//        }
+//        else{
+//            System.out.println("User not as group admin.");
+//        }
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        category.setLastEditedBy(currentUserId);
+//        categoryMapper.exitGroup(category);
+//    }
+
+    @Override
+    public void removeGroupAdmin(Integer groupId, Integer userId) {
+        if (adminCategoryMapper.isAdminInGroup(userId, groupId) >= 1) {
+            adminCategoryMapper.deleteAdminRelation(userId, groupId);
+            this.updateEditRecord(groupId);
         }
-        else{
-            System.out.println("User not in the group or as group admin.");
+        else {
+            System.out.println("User not as group admin.");
         }
     }
 
     @Override
-    public void removeGroupAdmin(Integer groupId, Integer userId) {
-        Category category = categoryMapper.findById(groupId);
-        List<String> groupAdminIds = new ArrayList<>(SplitUtil.splitBySemicolon(category.getGroupAdmin()));
-        if (groupAdminIds.contains(Integer.toString(userId))) {
-            groupAdminIds.remove(Integer.toString(userId));
-            String newGroupAdminIds = String.join(";", groupAdminIds);
-            category.setGroupAdmin(newGroupAdminIds);
-        }
-        else{
-            System.out.println("User not as group admin.");
-        }
+    public boolean isUserInGroup(Integer groupId, Integer userId) {
+        return userCategoryMapper.isUserInGroup(userId, groupId) >= 1;
+    }
+
+    @Override
+    public void updateEditRecord(Integer categoryId) {
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        category.setLastEditedBy(currentUserId);
-        categoryMapper.exitGroup(category);
+        categoryMapper.updateEditRecord(categoryId, currentUserId);
+    }
+
+    @Override
+    public List<Integer> listUsersId(Integer groupId) {
+        return userCategoryMapper.listUsersId(groupId);
+    }
+
+    @Override
+    public List<User> listUsers(Integer groupId) {
+        List<Integer> userIds = userCategoryMapper.listUsersId(groupId);
+        List<User> users = new ArrayList<>();
+        for (Integer userId : userIds) {
+            users.add(userMapper.findById(userId));
+        }
+        return users;
+    }
+
+    @Override
+    public List<Integer> listGroupAdminsId(Integer groupId) {
+        return adminCategoryMapper.listGroupAdminsId(groupId);
+    }
+
+    @Override
+    public List<User> listGroupAdmins(Integer groupId) {
+        List<Integer> userIds = adminCategoryMapper.listGroupAdminsId(groupId);
+        List<User> users = new ArrayList<>();
+        for (Integer userId : userIds) {
+            users.add(userMapper.findById(userId));
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> listGroupOwners(Integer groupId) {
+        return null;
+    }
+
+    @Override
+    public User getGroupOwner(Integer groupId) {
+        return userMapper.findById(categoryMapper.getGroupOwner(groupId));
     }
 
 

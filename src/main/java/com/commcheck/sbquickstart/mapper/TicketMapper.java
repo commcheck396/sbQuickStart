@@ -88,4 +88,6 @@ public interface TicketMapper {
 
     @Update("update tickets set image = #{newImage} where id = #{ticketId}")
     void addImage(Integer ticketId, String newImage);
+
+    List<Ticket> findByOwnerId(Integer currentUserId);
 }

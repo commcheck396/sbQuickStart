@@ -1,5 +1,7 @@
 package com.commcheck.sbquickstart.controller;
 
+import com.commcheck.sbquickstart.pojo.Category;
+import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.utils.*;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
@@ -172,5 +174,25 @@ public class UserController {
         return Result.success();
     }
 
+    @GetMapping("/groupsIJioned")
+    public Result<List<Category>> groupsIJioned() {
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        List<Category> list = userService.groupsIJioned(currentUserId);
+        return Result.success(list);
+    }
+
+    @GetMapping("/groupsIAdmin")
+    public Result<List<Category>> groupsIAdmin() {
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        List<Category> list = userService.groupsIAdmin(currentUserId);
+        return Result.success(list);
+    }
+
+    @GetMapping("/ticketsICreated")
+    public Result ticketsICreated() {
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        List<Ticket> list = userService.ticketsICreated(currentUserId);
+        return Result.success(list);
+    }
 
 }

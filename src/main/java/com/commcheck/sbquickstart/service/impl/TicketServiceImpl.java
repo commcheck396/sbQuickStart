@@ -285,5 +285,11 @@ public class TicketServiceImpl implements TicketService {
         this.updateEditRecord(ticketId);
     }
 
+    @Override
+    public List<String> getImages(Integer ticketId) {
+        return ticketMapper.getImage(ticketId);
+    }
+
+
 
 }

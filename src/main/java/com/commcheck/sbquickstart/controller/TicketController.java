@@ -538,4 +538,18 @@ public class TicketController {
         return Result.success();
     }
 
+    @GetMapping("/getImages")
+    public Result getImages(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if (!permissionCheckingUtil.checkReadPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to get this ticket");
+        }
+        List<String> images = ticketService.getImages(ticketId);
+        return Result.success(images);
+    }
+
+
+
 }

@@ -1,9 +1,9 @@
 package com.commcheck.sbquickstart.service;
 
+import com.commcheck.sbquickstart.pojo.Category;
 import com.commcheck.sbquickstart.pojo.Result;
+import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.pojo.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -24,4 +24,10 @@ public interface UserService {
     void addUserToGroup(List<Integer> list, Integer userId);
 
     void upgradeToRootAdmin(Integer userId);
+
+    List<Category> groupsIJioned(Integer currentUserId);
+
+    List<Category> groupsIAdmin(Integer currentUserId);
+
+    List<Ticket> ticketsICreated(Integer currentUserId);
 }

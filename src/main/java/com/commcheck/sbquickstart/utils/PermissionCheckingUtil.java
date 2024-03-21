@@ -1,6 +1,8 @@
 package com.commcheck.sbquickstart.utils;
 
+import com.commcheck.sbquickstart.mapper.AdminCategoryMapper;
 import com.commcheck.sbquickstart.mapper.TicketTicketMapper;
+import com.commcheck.sbquickstart.mapper.UserCategoryMapper;
 import com.commcheck.sbquickstart.pojo.Category;
 import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.pojo.User;
@@ -28,6 +30,12 @@ public class PermissionCheckingUtil {
     @Autowired
     public TicketTicketMapper ticketTicketMapper;
 
+    @Autowired
+    public UserCategoryMapper userCategoryMapper;
+
+    @Autowired
+    public AdminCategoryMapper adminCategoryMapper;
+
 
 
     public boolean isRootAdmin(){
@@ -37,23 +45,30 @@ public class PermissionCheckingUtil {
         return user.getStatus() <= 1;
     }
 
+//    public boolean isGroupAdmin(Integer groupId){
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        String groupAdmins = categoryService.findById(groupId).getGroupAdmin();
+//        return groupAdmins.contains(currentUserId.toString());
+//    }
     public boolean isGroupAdmin(Integer groupId){
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        String groupAdmins = categoryService.findById(groupId).getGroupAdmin();
-        return groupAdmins.contains(currentUserId.toString());
+        return adminCategoryMapper.isAdminInGroup(currentUserId, groupId) >= 1;
+    }
+
+    public boolean isGroupAdmin(Integer groupId, Integer currentUserId){
+        return adminCategoryMapper.isAdminInGroup(currentUserId, groupId) >= 1;
     }
 
     public boolean isInGroup(Integer groupId){
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        String groupMembers = categoryService.findById(groupId).getMember();
-        return groupMembers.contains(currentUserId.toString());
+        return userCategoryMapper.isUserInGroup(currentUserId, groupId) >= 1;
     }
 
     public boolean isInGroup(Integer groupId, Integer currentUserId){
-        String groupMembers = categoryService.findById(groupId).getMember();
-        return groupMembers.contains(currentUserId.toString());
+        return userCategoryMapper.isUserInGroup(currentUserId, groupId) >= 1;
     }
 
     public boolean isGroupOwner(Integer groupId){
@@ -129,5 +144,9 @@ public class PermissionCheckingUtil {
             }
         }
         return viewableTickets;
+    }
+
+    public boolean checkReadPermissionForCategory(Integer groupId) {
+        return true;
     }
 }

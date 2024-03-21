@@ -61,6 +61,13 @@ create table user_category(
                         constraint fk_user_category_category foreign key (categoryId) references category(id)
 ) comment 'User Category';
 
+create table admin_category(
+                               userId int unsigned not null comment 'User ID',
+                               categoryId int unsigned not null comment 'Category ID',
+                               constraint fk_admin_category_user foreign key (userId) references users(id),
+                               constraint fk_admin_category_category foreign key (categoryId) references category(id)
+) comment 'Admin Category';
+
 
 create table ticket_watcher(
                         ticketId int unsigned not null comment 'Ticket ID',
@@ -75,3 +82,5 @@ create table ticket_ticket(
                         constraint fk_ticket_ticket_ticket foreign key (ticketId) references tickets(id),
                         constraint fk_ticket_ticket_linked_ticket foreign key (linkedTicketId) references tickets(id)
 ) comment 'Ticket Ticket';
+
+

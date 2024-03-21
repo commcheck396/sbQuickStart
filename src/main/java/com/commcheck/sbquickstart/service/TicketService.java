@@ -89,4 +89,6 @@ public interface TicketService {
     void addImage(Integer ticketId, List<String> imageList);
 
     void removeImage(Integer ticketId, List<String> imageList);
+
+    List<String> getImages(Integer ticketId);
 }
