@@ -23,4 +23,10 @@ public interface UserCategoryMapper {
 
     @Select("select categoryId from user_category where userId = #{currentUserId}")
     List<Integer> groupsIJioned(Integer currentUserId);
+
+    @Delete("delete from user_category where categoryId = #{id}")
+    void deleteAllGroupRelations(Integer id);
+
+    @Select("select categoryId from user_category where userId = #{currentUserId}")
+    List<Integer> groupsIJoined(Integer currentUserId);
 }

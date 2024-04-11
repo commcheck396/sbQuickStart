@@ -91,4 +91,8 @@ public interface TicketService {
     void removeImage(Integer ticketId, List<String> imageList);
 
     List<String> getImages(Integer ticketId);
+
+    Integer getStatusById(Integer ticketId);
+
+    List<Integer> getWatchersId(Integer ticketId);
 }

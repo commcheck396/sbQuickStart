@@ -57,7 +57,6 @@ public class TicketController {
             return Result.fail("belongTo can not be empty");
         }
         else if(ticket.getDueTime() == null){
-//            TODO: handle date format
             return Result.fail("dueTime can not be empty");
         }
         else if(ticket.getAssigneeId() == null){
@@ -83,7 +82,7 @@ public class TicketController {
             if (ticket.getPriority() != null){
                 ticketService.modifyPriority(ticket, ticket.getPriority());
             }
-            return Result.success();
+            return Result.success(ticket.getId());
         }
     }
 
@@ -223,6 +222,39 @@ public class TicketController {
         }
     }
 
+    @PostMapping("/addWatchers")
+    public Result addWatchers(@RequestParam Integer ticketId, @RequestParam List<Integer> userIds){
+        boolean flag = false;
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if(!permissionCheckingUtil.checkEditPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to modify this ticket");
+        }
+        for (Integer userId : userIds){
+            if (!permissionCheckingUtil.isUserExist(userId)){
+                System.out.println("user " + userId + " does not exist");
+                continue;
+            }
+            else if(ticketService.isWatcher(ticketId, userId)){
+                System.out.println("user " + userId + " is already a watcher");
+                continue;
+            }
+            else if (!permissionCheckingUtil.checkReadPermissionForTicket(ticketId, userId)){
+                System.out.println("you don't have permission to add watcher to this ticket");
+                continue;
+            }
+            ticketService.addWatcher(ticketId, userId);
+            flag = true;
+        }
+        if (flag){
+            return Result.success();
+        }
+        else{
+            return Result.fail("add watcher failed");
+        }
+    }
+
     @PostMapping("/removeWatcher")
     public Result removeWatcher(@RequestParam Integer ticketId, @RequestParam String userIds){
         if (!permissionCheckingUtil.isTicketExist(ticketId)){
@@ -292,6 +324,18 @@ public class TicketController {
             return Result.fail("you don't have permission to get watchers of this ticket");
         }
         List<Integer> watchers = ticketService.getWatchers(ticketId);
+        return Result.success(watchers);
+    }
+
+    @GetMapping("/getWatchersId")
+    public Result getWatchersId(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if (!permissionCheckingUtil.checkReadPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to get watchers of this ticket");
+        }
+        List<Integer> watchers = ticketService.getWatchersId(ticketId);
         return Result.success(watchers);
     }
 
@@ -408,6 +452,31 @@ public class TicketController {
             return Result.fail("ticket is already linked");
         }
         ticketService.addLink(lowerId, higherId);
+        return Result.success();
+    }
+
+    @PostMapping("/addLinks")
+    public Result addLinks(@RequestParam Integer ticketId, @RequestParam List<Integer> ticketIds){
+        if (!permissionCheckingUtil.checkEditPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to modify this ticket");
+        }
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        for (Integer id : ticketIds){
+            if (!permissionCheckingUtil.isTicketExist(id)){
+                return Result.fail("ticket does not exist");
+            }
+            if (ticketId.equals(id)){
+                return Result.fail("ticket can not link to itself");
+            }
+            Integer lowerId = ticketId < id ? ticketId : id;
+            Integer higherId = ticketId < id ? id : ticketId;
+            if (ticketService.isLinked(lowerId, higherId)){
+                return Result.fail("ticket is already linked");
+            }
+            ticketService.addLink(lowerId, higherId);
+        }
         return Result.success();
     }
 
@@ -550,6 +619,17 @@ public class TicketController {
         return Result.success(images);
     }
 
+    @GetMapping("/getStatusById")
+    public Result getStatusById(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if (!permissionCheckingUtil.checkReadPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to get this ticket");
+        }
+        Integer status = ticketService.getStatusById(ticketId);
+        return Result.success(status);
+    }
 
 
 }

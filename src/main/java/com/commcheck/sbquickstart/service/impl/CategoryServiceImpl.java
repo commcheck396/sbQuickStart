@@ -69,6 +69,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Integer id) {
+        userCategoryMapper.deleteAllGroupRelations(id);
+        adminCategoryMapper.deleteAllGroupRelations(id);
         categoryMapper.deleteCategory(id);
     }
 
@@ -340,6 +342,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public User getGroupOwner(Integer groupId) {
         return userMapper.findById(categoryMapper.getGroupOwner(groupId));
+    }
+
+    @Override
+    public List<Category> listAllCategory() {
+        return categoryMapper.listAll();
     }
 
 

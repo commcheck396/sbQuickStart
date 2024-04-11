@@ -21,7 +21,7 @@ public class JWTUtil {
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256("commcheck")).build();
         DecodedJWT decodedJWT = jwtVerifier.verify(token);
         Map<String, Object> claims = decodedJWT.getClaim("user").asMap();
-        System.out.println(claims);
+//        System.out.println(claims);
         return claims;
     }
 }

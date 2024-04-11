@@ -39,7 +39,7 @@ public interface CategoryMapper {
 //    @Update("update category set ownerId = #{ownerId}, groupAdmin = #{groupAdmin}, lastEditedBy = #{lastEditedBy} where id = #{id}")
 //    void transferGroupOwnership(Category category);
 
-    @Update("update category set lastEditedBy = #{lastEditedBy}, updatedTime = now() where id = #{categoryId}")
+    @Update("update category set lastEditedBy = #{currentUserId}, updatedTime = now() where id = #{categoryId}")
     void updateEditRecord(Integer categoryId, Integer currentUserId);
 
     @Update("update category set ownerId = #{ownerId} where id = #{id}")
@@ -47,4 +47,7 @@ public interface CategoryMapper {
 
     @Select("select ownerId from category where id = #{groupId}")
     Integer getGroupOwner(Integer groupId);
+
+    @Select("select * from category")
+    List<Category> listAll();
 }

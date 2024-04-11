@@ -20,7 +20,7 @@ public class JwtTest {
         String token = JWT.create().withClaim("user", claims)
                 .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*60*12))
                 .sign(Algorithm.HMAC256("commcheck"));
-        System.out.println(token);
+//        System.out.println(token);
     }
 
     @Test
@@ -29,6 +29,6 @@ public class JwtTest {
         JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256("commcheck")).build();
         DecodedJWT decodedJWT = jwtVerifier.verify(token);
         Map<String, Claim> claims = decodedJWT.getClaims();
-        System.out.println(claims.get("user"));
+//        System.out.println(claims.get("user"));
     }
 }

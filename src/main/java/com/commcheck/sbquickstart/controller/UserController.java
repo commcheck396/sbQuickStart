@@ -37,7 +37,7 @@ public class UserController {
         else{
             Result result = userService.addUser(username, password);
             if(result.getCode() == 0){
-                System.out.println(result.getCode());
+//                System.out.println(result.getCode());
                 return Result.success("register success...");
             }
             else{
@@ -72,7 +72,7 @@ public class UserController {
     public Result<User> userInfo(@RequestHeader(name = "Authorization") String token){
         Map<String, Object> map = JWTUtil.JWTVerification(token);
         String username = (String) map.get("username");
-        System.out.println(username);
+//        System.out.println(username);
         User user = userService.findByUsername(username);
         return Result.success(user);
     }
@@ -80,7 +80,6 @@ public class UserController {
     @PutMapping("/update")
     public Result update(@RequestBody @Validated User user){
         user.setUpdated_time(LocalDateTime.now());
-        System.out.println("updating user info...");
         userService.update(user);
         return Result.success();
     }
@@ -181,6 +180,20 @@ public class UserController {
         return Result.success(list);
     }
 
+    @GetMapping("/groupsIin")
+    public Result<List<Integer>> groupsIin() {
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        List<Integer> list = userService.groupsIin(currentUserId);
+        return Result.success(list);
+    }
+
+    @GetMapping("/groupsInfoIin")
+    public Result<List<Category>> groupsInfoIin() {
+        List<Integer> Ids = groupsIin().getData();
+        List<Category> list = userService.groupsInfoIin(Ids);
+        return Result.success(list);
+    }
+
     @GetMapping("/groupsIAdmin")
     public Result<List<Category>> groupsIAdmin() {
         Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
@@ -194,5 +207,76 @@ public class UserController {
         List<Ticket> list = userService.ticketsICreated(currentUserId);
         return Result.success(list);
     }
+
+    @GetMapping("/getNameById")
+    public Result<String> getNameById(@RequestParam Integer userId) {
+        User user = userService.findById(userId);
+        if (user == null) {
+            return Result.fail("user not exists...");
+        }
+        String username = user.getUsername();
+        return Result.success(username);
+    }
+
+    @GetMapping("/isUserInGroup")
+    public Result<Boolean> isUserInGroup(@RequestParam Integer groupId) {
+        if (permissionCheckingUtil.isInGroup(groupId)) {
+            return Result.success(true);
+        } else {
+            return Result.success(false);
+        }
+    }
+
+    @GetMapping("/canUserEditGroup")
+    public Result<Boolean> canUserEditGroup(@RequestParam Integer groupId) {
+        if (permissionCheckingUtil.isGroupAdmin(groupId) || permissionCheckingUtil.isRootAdmin() || permissionCheckingUtil.isGroupOwner(groupId)) {
+            return Result.success(true);
+        } else {
+            return Result.success(false);
+        }
+    }
+
+    @GetMapping("/canUserDeleteGroup")
+    public Result<Boolean> canUserDeleteGroup(@RequestParam Integer groupId) {
+        if (permissionCheckingUtil.isRootAdmin() || permissionCheckingUtil.isGroupOwner(groupId)) {
+            return Result.success(true);
+        } else {
+            return Result.success(false);
+        }
+    }
+
+    @GetMapping("/canUserViewGroup")
+    public Result<Boolean> canUserViewGroup(@RequestParam Integer groupId) {
+        if (permissionCheckingUtil.checkReadPermissionForCategory(groupId)) {
+            return Result.success(true);
+        } else {
+            return Result.success(false);
+        }
+    }
+
+    @GetMapping("/allUserNames")
+    public Result<Map<Integer, String>> allUserNames() {
+        Map<Integer, String> userNames = userService.allUserNames();
+        return Result.success(userNames);
+    }
+
+    @GetMapping("/getUserByName")
+    public Result<User> getUserByName(@RequestParam String username) {
+        User user = userService.findByUsername(username);
+        return Result.success(user);
+    }
+
+    @GetMapping("/getUserByEmail")
+    public Result<User> getUserByEmail(@RequestParam String email) {
+        User user = userService.findByEmail(email);
+        return Result.success(user);
+    }
+
+
+
+
+//    @GetMapping("/getAdminNamesByGroupId")
+//    public Result<List<String>> getAdminNamesByGroupId(@RequestParam Integer groupId) {
+//        List<String> list = userService.
 
 }

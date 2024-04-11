@@ -41,6 +41,12 @@ public class CategoryController {
         return Result.success(categoryList);
     }
 
+    @GetMapping("/all")
+    public Result<List<Category>> listAll() {
+        List<Category> categoryList = categoryService.listAllCategory();
+        return Result.success(categoryList);
+    }
+
     @GetMapping("/detail")
     public Result<Category> detail(@RequestParam("id") Integer id) {
         Category category = categoryService.findById(id);
@@ -60,9 +66,6 @@ public class CategoryController {
         }
         if (!permissionCheckingUtil.checkEditPermissionForCategory(currentCategory)) {
             return Result.fail("You do not have permission to edit this category");
-        }
-        if (categoryService.findByCategoryName(category.getCategoryName()) != null) {
-            return Result.fail("Category Name already exists");
         }
         categoryService.updateCategory(category);
         return Result.success();
@@ -242,9 +245,9 @@ public class CategoryController {
         if (!permissionCheckingUtil.isCategoryExist(groupId)) {
             return Result.fail("Group does not exist");
         }
-        if (!permissionCheckingUtil.checkReadPermissionForCategory(groupId)) {
-            return Result.fail("You do not have permission to read this group");
-        }
+//        if (!permissionCheckingUtil.checkReadPermissionForCategory(groupId)) {
+//            return Result.fail("You do not have permission to read this group");
+//        }
         List<Integer> userIdList = categoryService.listGroupAdminsId(groupId);
         return Result.success(userIdList);
     }
@@ -254,9 +257,9 @@ public class CategoryController {
         if (!permissionCheckingUtil.isCategoryExist(groupId)) {
             return Result.fail("Group does not exist");
         }
-        if (!permissionCheckingUtil.checkReadPermissionForCategory(groupId)) {
-            return Result.fail("You do not have permission to read this group");
-        }
+//        if (!permissionCheckingUtil.checkReadPermissionForCategory(groupId)) {
+//            return Result.fail("You do not have permission to read this group");
+//        }
         List<User> userList = categoryService.listGroupAdmins(groupId);
         return Result.success(userList);
     }
@@ -284,7 +287,6 @@ public class CategoryController {
         User user = categoryService.getGroupOwner(groupId);
         return Result.success(user);
     }
-
 
 
 }

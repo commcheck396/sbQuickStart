@@ -25,4 +25,7 @@ public interface TicketWatcherMapper {
 //    @Select("select ticketId from ticket_watcher where userId = #{watcherId}")
     @Select("select * from tickets where id in (select ticketId from ticket_watcher where userId = #{watcherId})")
     List<Ticket> getTicketByWatcher(Integer watcherId);
+
+    @Select("select userId from ticket_watcher where ticketId = #{ticketId}")
+    List<Integer> getWatchersId(Integer ticketId);
 }

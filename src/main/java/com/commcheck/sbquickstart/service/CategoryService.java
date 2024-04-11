@@ -45,4 +45,6 @@ public interface CategoryService {
     List<User> listGroupOwners(Integer groupId);
 
     User getGroupOwner(Integer groupId);
+
+    List<Category> listAllCategory();
 }

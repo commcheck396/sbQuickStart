@@ -14,8 +14,6 @@ public class User {
     private String username;
     @JsonIgnore
     private String password;
-    @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9_-]{3,16}$", message = "illinegal username")
     private String nickname;
     @Email
     private String email;

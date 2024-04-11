@@ -1,10 +1,7 @@
 package com.commcheck.sbquickstart.mapper;
 
 import com.commcheck.sbquickstart.pojo.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -34,5 +31,9 @@ public interface UserMapper {
 
     @Update("update users set status = 0 where id = #{userId}")
     void upgradeToRootAdmin(Integer userId);
+    @Select("SELECT id, username FROM users")
+    List<User> allUsers();
 
+    @Select("select * from users where email = #{email}")
+    User findByEmail(String email);
 }

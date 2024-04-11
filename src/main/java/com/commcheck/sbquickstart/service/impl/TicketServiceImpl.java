@@ -290,6 +290,16 @@ public class TicketServiceImpl implements TicketService {
         return ticketMapper.getImage(ticketId);
     }
 
+    @Override
+    public Integer getStatusById(Integer ticketId) {
+        return ticketMapper.getStatusById(ticketId);
+
+    }
+
+    @Override
+    public List<Integer> getWatchersId(Integer ticketId) {
+        return ticketWatcherMapper.getWatchersId(ticketId);
+    }
 
 
 }

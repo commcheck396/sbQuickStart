@@ -9,7 +9,7 @@ public class SplitUtilTest {
     @Test
     public void testSplit() {
         List<String> result = SplitUtil.splitBySemicolon("");
-        System.out.println("start"+result+"end");
+//        System.out.println("start"+result+"end");
 //        assert result.size() == 0;
 //        assert result.get(0).equals("a");
 

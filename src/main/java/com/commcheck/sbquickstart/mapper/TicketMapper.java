@@ -9,10 +9,10 @@ import java.util.List;
 public interface TicketMapper {
     List<Ticket> list(Integer currentUserId, String belongTo, Integer priority, Integer state, Integer type);
 
-    @Insert("insert into tickets (title, description, assigneeId, ownerId, createdTime, updatedTime, dueTime, lastEditedBy, belongsTo) " +
-            "values (#{title}, #{description}, #{assigneeId}, #{ownerId}, now(), now(), DATE_ADD(now(), INTERVAL #{dueTime} DAY), #{ownerId}, #{belongsTo})")
-//    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=Integer.class)
-//    Integer addTicket(Ticket ticket);
+//    @Insert("insert into tickets (title, description, assigneeId, ownerId, createdTime, updatedTime, dueTime, lastEditedBy, belongsTo, attachment) " +
+//            "values (#{title}, #{description}, #{assigneeId}, #{ownerId}, now(), now(), DATE_ADD(now(), INTERVAL #{dueTime} DAY), #{ownerId}, #{belongsTo}, #{attachment})")
+@Insert("insert into tickets (title, description, assigneeId, ownerId, createdTime, updatedTime, dueTime, lastEditedBy, belongsTo, attachment) " +
+        "values (#{title}, #{description}, #{assigneeId}, #{ownerId}, now(), now(), #{dueTime}, #{ownerId}, #{belongsTo}, #{attachment})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     Integer addTicket(Ticket ticket);
 
@@ -31,7 +31,7 @@ public interface TicketMapper {
     @Update("update tickets set assigneeId = #{assigneeId}, lastEditedBy = #{lastEditedBy}, updatedTime = now() where id = #{id}")
     void modifyAssignee(Ticket ticket);
 
-    @Update("update tickets set title = #{title}, description = #{description}, lastEditedBy = #{lastEditedBy}, updatedTime = now(), assigneeId = #{assigneeId}, belongsTo = #{belongsTo}, dueTime = DATE_ADD(now(), INTERVAL #{dueTime} DAY) where id = #{id}")
+    @Update("update tickets set title = #{title}, description = #{description}, lastEditedBy = #{lastEditedBy}, updatedTime = now(), assigneeId = #{assigneeId}, belongsTo = #{belongsTo}, dueTime = #{dueTime} where id = #{id}")
     void updateTicket(Ticket ticket);
 
     @Delete("delete from tickets where id = #{ticketId}")
@@ -90,4 +90,7 @@ public interface TicketMapper {
     void addImage(Integer ticketId, String newImage);
 
     List<Ticket> findByOwnerId(Integer currentUserId);
+
+    @Select("select state from tickets where id = #{ticketId}")
+    Integer getStatusById(Integer ticketId);
 }

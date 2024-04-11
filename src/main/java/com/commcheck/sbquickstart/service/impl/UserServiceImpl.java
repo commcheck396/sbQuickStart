@@ -7,11 +7,13 @@ import com.commcheck.sbquickstart.utils.Encrypter;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.User;
 import com.commcheck.sbquickstart.service.UserService;
+import com.commcheck.sbquickstart.utils.PermissionCheckingUtil;
 import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private UserCategoryMapper userCategoryMapper;
     @Autowired
     private AdminCategoryMapper adminCategoryMapper;
+//    @Autowired
+//    private PermissionCheckingUtil permissionCheckingUtil;
 //    @Select("select * from users where username = #{username}")
     @Override
     public User findByUsername(String username) {
@@ -49,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User user) {
+//        user.setId(permissionCheckingUtil.getCurrentUserId());
         userMapper.update(user);
     }
 
@@ -112,5 +117,40 @@ public class UserServiceImpl implements UserService {
     public List<Ticket> ticketsICreated(Integer currentUserId) {
         List<Ticket> tickets = ticketMapper.findByOwnerId(currentUserId);
         return tickets;
+    }
+
+
+    @Override
+    public Map<Integer, String> allUserNames() {
+        List<User> users = this.allUsers();
+        Map<Integer, String> map = new HashMap<>();
+        for (User user : users) {
+            map.put(user.getId(), user.getUsername());
+        }
+        return map;
+    }
+
+    @Override
+    public List<User> allUsers() {
+        return userMapper.allUsers();
+    }
+
+    @Override
+    public List<Integer> groupsIin(Integer currentUserId) {
+        return userCategoryMapper.groupsIJoined(currentUserId);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userMapper.findByEmail(email);
+    }
+
+    @Override
+    public List<Category> groupsInfoIin(List<Integer> ids) {
+        List<Category> categories = new ArrayList<>();
+        for (Integer id : ids) {
+            categories.add(categoryMapper.findById(id));
+        }
+        return categories;
     }
 }
