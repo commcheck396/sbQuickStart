@@ -24,4 +24,10 @@ public interface TicketTicketMapper {
 
     @Select("select linkedTicketId from ticket_ticket where ticketId = #{ticketId1} and linkedTicketId = #{ticketId2}")
     Integer isLinked(Integer ticketId1, Integer ticketId2);
+
+    @Delete("delete from ticket_ticket where ticketId = #{ticketId} or linkedTicketId = #{ticketId}")
+    void removeAllLinks(Integer ticketId);
+
+    @Select("select linkedTicketId from ticket_ticket where ticketId = #{ticketId} union select ticketId from ticket_ticket where linkedTicketId = #{ticketId}")
+    List<Integer> getLinkedTicketIds(Integer ticketId);
 }

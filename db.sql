@@ -83,4 +83,17 @@ create table ticket_ticket(
                         constraint fk_ticket_ticket_linked_ticket foreign key (linkedTicketId) references tickets(id)
 ) comment 'Ticket Ticket';
 
+create table application(
+                           id int unsigned auto_increment primary key comment 'ID',
+                            sender int unsigned not null comment 'Sender',
+                            receiver int unsigned not null comment 'Receiver',
+                            target int unsigned default 0 comment 'Target',
+                            type int unsigned default 0 comment 'Type',
+                            status int unsigned default 0 comment 'Status',
+                            message varchar(512) default '' comment 'Message',
+                            createdTime datetime not null comment 'Created Time',
+                            updatedTime datetime not null comment 'Updated Time',
+                            lastEditedBy int unsigned default 0 comment 'Last Edited By',
+                            constraint fk_application_sender foreign key (sender) references users(id)
+) comment 'Application';
 

@@ -28,4 +28,10 @@ public interface TicketWatcherMapper {
 
     @Select("select userId from ticket_watcher where ticketId = #{ticketId}")
     List<Integer> getWatchersId(Integer ticketId);
+
+    @Delete("delete from ticket_watcher where ticketId = #{ticketId}")
+    void removeAllWatchers(Integer ticketId);
+
+    @Select("select ticketId from ticket_watcher where userId = #{watcherId}")
+    List<Integer> getTicketIdByWatcherId(Integer watcherId);
 }

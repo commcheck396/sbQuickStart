@@ -326,4 +326,31 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJ1c2Vy
 ###
 GET http://localhost:8080/user/groupsIin
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo3LCJ1c2VybmFtZSI6IjExMTExIn0sImV4cCI6MTcxMzg0MjM4OX0.-8DWO6wmJZ4aWU6tsi6li2QJyOR_5Jeo4w4t3oGwAus
+
+###
+GET http://localhost:8080/email/sendCode?addr=comm_check@qq.com
+Content-Type: application/json
+
+###
+GET http://localhost:8080/ticket?pageNum=1&pageSize=5&belongsTo=9
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo3LCJ1c2VybmFtZSI6IjExMTExIn0sImV4cCI6MTcxMzg0MjM4OX0.-8DWO6wmJZ4aWU6tsi6li2QJyOR_5Jeo4w4t3oGwAus
+
+
+
+###
+GET http://localhost:8080/email/verifyCodelogin?addr=comm_check@qq.com&code=331300
+Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6ImNhdHRlc3QxIn0sImV4cCI6MTcxMjk4NjM1N30.TomLXEw3nzu9ydNCFOnaM7pBWtiPnPnrraRLYvxMI2A
+
+###
+
+POST http://localhost:8080/request/joinGroupRequest?groupId=9
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdHRlc3QyIn0sImV4cCI6MTcxNDA0NzM0N30.sDJTPOBQ1g1TsK9_akloyXg7dcXqnfs4ItIagNxbYmI
+
+###
+GET http://localhost:8080/request/getAllRequestForCurrentUser
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdHRlc3QyIn0sImV4cCI6MTcxNDA0NzM0N30.sDJTPOBQ1g1TsK9_akloyXg7dcXqnfs4ItIagNxbYmI

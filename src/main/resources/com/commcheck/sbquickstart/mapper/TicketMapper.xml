@@ -4,17 +4,23 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.commcheck.sbquickstart.mapper.TicketMapper">
     <select id="list" resultType="com.commcheck.sbquickstart.pojo.Ticket">
-        select * from ticket
+        select * from tickets
         <where>
             <if test="state != null">
                 state = #{state}
             </if>
 
-            <if test="type ! = null">
+            <if test="type != null">
                 type = #{type}
             </if>
 
-            and ownerId = #{ownerId}
+            <if test="belongsTo != null">
+                belongsTo = #{belongsTo}
+            </if>
+
+            and belongsTo in (
+                select categoryId from user_category where userId = #{currentUserId}
+            )
 
         </where>
     </select>

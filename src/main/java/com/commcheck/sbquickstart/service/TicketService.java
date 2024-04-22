@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface TicketService {
-    PageBean<Ticket> list(Integer pageNum, Integer pageSize, String belongTo, Integer priority, Integer state, Integer type);
+    PageBean<Ticket> list(Integer pageNum, Integer pageSize, Integer belongsTo, Integer priority, Integer state, Integer type);
 
     Integer addTicket(Ticket ticket);
 
@@ -95,4 +95,12 @@ public interface TicketService {
     Integer getStatusById(Integer ticketId);
 
     List<Integer> getWatchersId(Integer ticketId);
+
+    void removeAllLinks(Integer ticketId);
+
+    void removeAllWatchers(Integer ticketId);
+
+    List<Integer> getLinkedTicketIds(Integer ticketId);
+
+    List<Integer> getTicketByWatcherId(Integer watcherId);
 }

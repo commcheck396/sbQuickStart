@@ -23,12 +23,12 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     private TicketTicketMapper ticketTicketMapper;
     @Override
-    public PageBean<Ticket> list(Integer pageNum, Integer pageSize, String belongTo, Integer priority, Integer state, Integer type) {
+    public PageBean<Ticket> list(Integer pageNum, Integer pageSize, Integer belongsTo, Integer priority, Integer state, Integer type) {
         PageBean<Ticket> pageBean = new PageBean<>();
         PageHelper.startPage(pageNum, pageSize);
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        List<Ticket> list = ticketMapper.list(currentUserId, belongTo, priority, state, type);
+        List<Ticket> list = ticketMapper.list(currentUserId, belongsTo, priority, state, type);
         Page<Ticket> page = (Page<Ticket>) list;
         pageBean.setTotal(page.getTotal());
         pageBean.setItems(page.getResult());
@@ -121,7 +121,7 @@ public class TicketServiceImpl implements TicketService {
     public void removeWatcher(Integer ticketId) {
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        ticketWatcherMapper.addWatcher(ticketId, currentUserId);
+        ticketWatcherMapper.removeWatcher(ticketId, currentUserId);
 
     }
 
@@ -299,6 +299,27 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<Integer> getWatchersId(Integer ticketId) {
         return ticketWatcherMapper.getWatchersId(ticketId);
+    }
+
+    @Override
+    public void removeAllLinks(Integer ticketId) {
+        ticketTicketMapper.removeAllLinks(ticketId);
+    }
+
+    @Override
+    public void removeAllWatchers(Integer ticketId) {
+        ticketWatcherMapper.removeAllWatchers(ticketId);
+
+    }
+
+    @Override
+    public List<Integer> getLinkedTicketIds(Integer ticketId) {
+        return ticketTicketMapper.getLinkedTicketIds(ticketId);
+    }
+
+    @Override
+    public List<Integer> getTicketByWatcherId(Integer watcherId) {
+        return ticketWatcherMapper.getTicketIdByWatcherId(watcherId);
     }
 
 

@@ -29,13 +29,14 @@ public class UserController {
 
     @PostMapping("/register")
     public Result register(@Pattern(regexp = "^[a-zA-Z0-9_]{5,16}$", message = "username format error...") String username,
-                           @Pattern(regexp = "^[a-zA-Z0-9_]{5,16}$", message = "password format error...") String password) {
+                           @Pattern(regexp = "^[a-zA-Z0-9_]{5,16}$", message = "password format error...") String password,
+                           String email) {
         User user = userService.findByUsername(username);
         if (user != null) {
             return Result.fail("user already exists...");
         }
         else{
-            Result result = userService.addUser(username, password);
+            Result result = userService.addUser(username, password, email);
             if(result.getCode() == 0){
 //                System.out.println(result.getCode());
                 return Result.success("register success...");
@@ -115,15 +116,17 @@ public class UserController {
         return Result.success();
     }
 
-    @PostMapping("/joinGroupRequest")
-    public Result joinGroupRequest(@RequestParam String groupList){
-//        TODO: notify group admin or admin to approve
-        List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Integer currentUserId = (Integer) map.get("id");
-        System.out.println("user "+ currentUserId + "apply to join group" + list);
-        return Result.success();
-    }
+
+
+//    @PostMapping("/joinGroupRequest")
+//    public Result joinGroupRequest(@RequestParam String groupList){
+////        TODO: notify group admin or admin to approve
+//        List<Integer> list = SplitUtil.splitBySemicolonInt(groupList);
+//        Map<String, Object> map = ThreadLocalUtil.get();
+//        Integer currentUserId = (Integer) map.get("id");
+//        System.out.println("user "+ currentUserId + "apply to join group" + list);
+//        return Result.success();
+//    }
 
     @PostMapping("/rootAdminRequest")
     public Result adminRequest(){
@@ -136,9 +139,24 @@ public class UserController {
 
     @PostMapping("/groupAdminRequest")
     public Result groupAdminRequest(@RequestParam Integer groupId){
-//        TODO: notify admin to approve
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        if (permissionCheckingUtil.isGroupAdmin(groupId)){
+            return Result.fail("you are already an admin of this group...");
+        }
+        userService.requestGroupAdmin(groupId, currentUserId);
         return Result.success();
     }
+
+    @PostMapping("/joinGroupRequest")
+    public Result joinGroupRequest(@RequestParam Integer groupId){
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        if (permissionCheckingUtil.isInGroup(groupId)){
+            return Result.fail("you are already in this group...");
+        }
+        userService.requestJoinGroup(groupId, currentUserId);
+        return Result.success();
+    }
+
 
     @PostMapping("/approveRootAdminRequest")
     public Result approveAdminRequest(@RequestParam Integer userId){
@@ -272,11 +290,22 @@ public class UserController {
         return Result.success(user);
     }
 
+    @PostMapping("/updateUserEmail")
+    public Result updateUserEmail(@RequestParam String email) {
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Integer currentUserId = (Integer) map.get("id");
+        userService.updateUserEmail(currentUserId, email);
+        return Result.success();
+    }
 
+    @GetMapping("/canUserEditTicket")
+    public Result<Boolean> canUserEditTicket(@RequestParam Integer ticketId) {
+        if (permissionCheckingUtil.checkEditPermissionForTicket(ticketId)) {
+            return Result.success(true);
+        } else {
+            return Result.success(false);
+        }
+    }
 
-
-//    @GetMapping("/getAdminNamesByGroupId")
-//    public Result<List<String>> getAdminNamesByGroupId(@RequestParam Integer groupId) {
-//        List<String> list = userService.
 
 }

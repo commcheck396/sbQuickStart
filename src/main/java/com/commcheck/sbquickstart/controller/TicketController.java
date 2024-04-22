@@ -1,11 +1,10 @@
 package com.commcheck.sbquickstart.controller;
 
-import com.commcheck.sbquickstart.mapper.TicketTicketMapper;
-import com.commcheck.sbquickstart.mapper.TicketWatcherMapper;
 import com.commcheck.sbquickstart.pojo.PageBean;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.service.TicketService;
+import com.commcheck.sbquickstart.service.UserService;
 import com.commcheck.sbquickstart.utils.PermissionCheckingUtil;
 import com.commcheck.sbquickstart.utils.SplitUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,26 +20,18 @@ public class TicketController {
     private TicketService ticketService;
     @Autowired
     private PermissionCheckingUtil permissionCheckingUtil;
+    @Autowired
+    private UserService userService;
 
-
-    @GetMapping("/list")
-    public Result<String> list() {
-        return Result.success("Ticket List");
-    }
-
-//    @PostMapping("/add")
-//    public Result<String> add(@) {
-//
-//    }
 
     @GetMapping
     public Result<PageBean<Ticket>> list(Integer pageNum,
                                          Integer pageSize,
-                                         @RequestParam(required = false) String belongTo,
+                                         @RequestParam(required = false) Integer belongsTo,
                                          @RequestParam(required = false) Integer priority,
                                          @RequestParam(required = false)Integer state,
                                          @RequestParam(required = false)Integer type){
-        PageBean<Ticket> page = ticketService.list(pageNum, pageSize, belongTo, priority, state, type);
+        PageBean<Ticket> page = ticketService.list(pageNum, pageSize, belongsTo, priority, state, type);
 
         return Result.success(page);
     }
@@ -165,10 +156,11 @@ public class TicketController {
         } else if (ticket.getBelongsTo() == null) {
             return Result.fail("belongTo can not be empty");
         } else if (ticket.getDueTime() == null) {
-//            TODO: handle date format
             return Result.fail("dueTime can not be empty");
         } else if (ticket.getAssigneeId() == null) {
             return Result.fail("assigneeId can not be empty");
+        } else if (ticket.getPriority() == null) {
+            return Result.fail("priority can not be empty");
         } else if (!permissionCheckingUtil.isUserExist(ticket.getAssigneeId())) {
             return Result.fail("assigneeId does not exist");
         } else if (!permissionCheckingUtil.isGroupExist(ticket.getBelongsTo())) {
@@ -371,6 +363,13 @@ public class TicketController {
         return Result.success(viewableTickets);
     }
 
+    @GetMapping("/getTicketIdIWatching")
+    public Result getTicketIdIWatching(){
+        Integer watcherId = permissionCheckingUtil.getCurrentUserId();
+        List<Integer> viewableTicketsId = ticketService.getTicketByWatcherId(watcherId);
+        return Result.success(viewableTicketsId);
+    }
+
     @GetMapping("/getTicketByGroup")
     public Result getTicketByGroup(@RequestParam Integer groupId){
         if (!permissionCheckingUtil.isGroupExist(groupId)){
@@ -513,6 +512,18 @@ public class TicketController {
         return Result.success(viewableTickets);
     }
 
+    @GetMapping("/getLinkedTicketIds")
+    public Result getLinkedTicketIds(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if (!permissionCheckingUtil.checkReadPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to get this ticket");
+        }
+        List<Integer> ticketIds = ticketService.getLinkedTicketIds(ticketId);
+        return Result.success(ticketIds);
+    }
+
     @PostMapping("/transferTicket")
     public Result transferTicket(@RequestParam Integer ticketId, @RequestParam Integer userId){
         if (!permissionCheckingUtil.isTicketExist(ticketId)){
@@ -629,6 +640,30 @@ public class TicketController {
         }
         Integer status = ticketService.getStatusById(ticketId);
         return Result.success(status);
+    }
+
+    @DeleteMapping("/removeAllLinks")
+    public Result removeAllLinks(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if (!permissionCheckingUtil.checkEditPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to modify this ticket");
+        }
+        ticketService.removeAllLinks(ticketId);
+        return Result.success();
+    }
+
+    @DeleteMapping("/removeAllWatchers")
+    public Result removeAllWatchers(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        if (!permissionCheckingUtil.checkEditPermissionForTicket(ticketId)){
+            return Result.fail("you don't have permission to modify this ticket");
+        }
+        ticketService.removeAllWatchers(ticketId);
+        return Result.success();
     }
 
 

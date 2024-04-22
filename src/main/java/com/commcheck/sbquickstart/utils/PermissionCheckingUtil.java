@@ -111,7 +111,10 @@ public class PermissionCheckingUtil {
     }
 
     public boolean checkEditPermissionForTicket(Integer ticketId) {
-        return true;
+        Integer ownerId = ticketService.findById(ticketId).getOwnerId();
+        Integer currentUserId = getCurrentUserId();
+        Integer assigneeId = ticketService.findById(ticketId).getAssigneeId();
+        return ownerId.equals(currentUserId) || assigneeId.equals(currentUserId) || isRootAdmin();
     }
     public boolean checkReadPermissionForTicket(Integer ticketId) {
         return true;
@@ -147,6 +150,9 @@ public class PermissionCheckingUtil {
     }
 
     public boolean checkReadPermissionForCategory(Integer groupId) {
-        return true;
+        if (isInGroup(groupId)||isGroupAdmin(groupId)||isGroupOwner(groupId)||isRootAdmin()){
+            return true;
+        }
+        return false;
     }
 }

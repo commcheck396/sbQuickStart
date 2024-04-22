@@ -13,9 +13,9 @@ public interface UserMapper {
 
     @Select("select * from users where username = #{username}")
     User findByUsername(String username);
-    @Insert("insert into users (username, password, created_time, updated_time)" +
-            "values (#{username}, #{password}, now(), now())")
-    void addUser(String username, String password);
+    @Insert("insert into users (username, password, created_time, updated_time, email)" +
+            "values (#{username}, #{password}, now(), now(), #{email})")
+    void addUser(String username, String password, String email);
 
     @Update("update users set avatar = #{avatarUrl}, updated_time = now() where id = #{id}")
     void updateAvatar(String avatarUrl, Integer id);
@@ -36,4 +36,7 @@ public interface UserMapper {
 
     @Select("select * from users where email = #{email}")
     User findByEmail(String email);
+    @Update("update users set email = #{email} where id = #{currentUserId}")
+    void updateUserEmail(Integer currentUserId, String email);
+
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 public class FileUploadController {
     @PostMapping("/upload")
     public Result<String> upload(MultipartFile file) throws IOException {
-        String fileName = UUID.randomUUID().toString() + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.'));
+        String fileName = UUID.randomUUID().toString() + "~" + file.getOriginalFilename();
         String URL = OSSUtil.uploadFile(fileName, file.getInputStream());
         return Result.success(URL);
     }
