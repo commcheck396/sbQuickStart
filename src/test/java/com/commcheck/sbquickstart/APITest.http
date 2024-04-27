@@ -44,8 +44,8 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJ1c2Vy
 POST http://localhost:8080/user/login
 Content-Type: application/x-www-form-urlencoded
 
-username = 11111 &
-password = 11111
+username = cattest2 &
+password = 123456
 
 <> 2024-03-14T002823.200.json
 <> 2024-03-13T174713.200.json
@@ -326,7 +326,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJ1c2Vy
 ###
 GET http://localhost:8080/user/groupsIin
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo3LCJ1c2VybmFtZSI6IjExMTExIn0sImV4cCI6MTcxMzg0MjM4OX0.-8DWO6wmJZ4aWU6tsi6li2QJyOR_5Jeo4w4t3oGwAus
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdHRlc3QyIn0sImV4cCI6MTcxNDU0NDk1NX0.uxJrIgdZMlPKBGK1qyTILb_OxTKRIM6vCiHkLS0KiSI
 
 ###
 GET http://localhost:8080/email/sendCode?addr=comm_check@qq.com
@@ -346,9 +346,9 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2Vy
 
 ###
 
-POST http://localhost:8080/request/joinGroupRequest?groupId=9
+POST http://localhost:8080/request/groupAdminRequest
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdHRlc3QyIn0sImV4cCI6MTcxNDA0NzM0N30.sDJTPOBQ1g1TsK9_akloyXg7dcXqnfs4ItIagNxbYmI
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdHRlc3QyIn0sImV4cCI6MTcxNDU0NDk1NX0.uxJrIgdZMlPKBGK1qyTILb_OxTKRIM6vCiHkLS0KiSI
 
 ###
 GET http://localhost:8080/request/getAllRequestForCurrentUser

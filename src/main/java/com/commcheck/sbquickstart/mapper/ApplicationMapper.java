@@ -1,10 +1,7 @@
 package com.commcheck.sbquickstart.mapper;
 
 import com.commcheck.sbquickstart.pojo.Message;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -54,4 +51,7 @@ public interface ApplicationMapper {
 
     @Select("select * from application where target = #{ticketId} and receiver = #{assingeeId} and type = 3")
     Message findTicketReminderByTicketIdAndReceiver(Integer ticketId, Integer assingeeId);
+
+    @Delete("delete from application where target = #{ticketId} and type = 3")
+    void removeAllTicketReminder(Integer ticketId);
 }

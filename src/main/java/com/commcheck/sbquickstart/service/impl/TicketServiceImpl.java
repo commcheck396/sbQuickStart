@@ -1,5 +1,6 @@
 package com.commcheck.sbquickstart.service.impl;
 
+import com.commcheck.sbquickstart.mapper.ApplicationMapper;
 import com.commcheck.sbquickstart.mapper.TicketMapper;
 import com.commcheck.sbquickstart.mapper.TicketTicketMapper;
 import com.commcheck.sbquickstart.mapper.TicketWatcherMapper;
@@ -22,18 +23,22 @@ public class TicketServiceImpl implements TicketService {
     private TicketWatcherMapper ticketWatcherMapper;
     @Autowired
     private TicketTicketMapper ticketTicketMapper;
+
+    @Autowired
+    private ApplicationMapper applicationMapper;
     @Override
-    public PageBean<Ticket> list(Integer pageNum, Integer pageSize, Integer belongsTo, Integer priority, Integer state, Integer type) {
+    public PageBean<Ticket> list(Integer pageNum, Integer pageSize, Integer belongsTo, Integer priority, Integer state, Integer type, Integer assigneeId, Integer OwnerId, Integer watcherId) {
         PageBean<Ticket> pageBean = new PageBean<>();
         PageHelper.startPage(pageNum, pageSize);
         Map<String, Object> map = ThreadLocalUtil.get();
         Integer currentUserId = (Integer) map.get("id");
-        List<Ticket> list = ticketMapper.list(currentUserId, belongsTo, priority, state, type);
+        List<Ticket> list = ticketMapper.list(currentUserId, belongsTo, priority, state, type, assigneeId, OwnerId, watcherId);
         Page<Ticket> page = (Page<Ticket>) list;
         pageBean.setTotal(page.getTotal());
         pageBean.setItems(page.getResult());
         return pageBean;
     }
+
 
     @Override
     public Integer addTicket(Ticket ticket) {
@@ -96,6 +101,9 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void deleteTicket(Integer ticketId) {
+        ticketTicketMapper.removeAllLinks(ticketId);
+        ticketWatcherMapper.removeAllWatchers(ticketId);
+        applicationMapper.removeAllTicketReminder(ticketId);
         ticketMapper.deleteTicket(ticketId);
     }
 
@@ -321,6 +329,7 @@ public class TicketServiceImpl implements TicketService {
     public List<Integer> getTicketByWatcherId(Integer watcherId) {
         return ticketWatcherMapper.getTicketIdByWatcherId(watcherId);
     }
+
 
 
 }

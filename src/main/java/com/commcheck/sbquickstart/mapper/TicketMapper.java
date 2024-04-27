@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface TicketMapper {
-    List<Ticket> list(Integer currentUserId, Integer belongsTo, Integer priority, Integer state, Integer type);
+    List<Ticket> list(Integer currentUserId, Integer belongsTo, Integer priority, Integer state, Integer type, Integer assigneeId, Integer ownerId, Integer watcherId);
 
 //    @Insert("insert into tickets (title, description, assigneeId, ownerId, createdTime, updatedTime, dueTime, lastEditedBy, belongsTo, attachment) " +
 //            "values (#{title}, #{description}, #{assigneeId}, #{ownerId}, now(), now(), DATE_ADD(now(), INTERVAL #{dueTime} DAY), #{ownerId}, #{belongsTo}, #{attachment})")

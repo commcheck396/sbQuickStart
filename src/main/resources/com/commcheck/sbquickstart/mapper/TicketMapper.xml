@@ -7,21 +7,24 @@
         select * from tickets
         <where>
             <if test="state != null">
-                state = #{state}
+                AND state = #{state}
             </if>
-
             <if test="type != null">
-                type = #{type}
+                AND type = #{type}
             </if>
-
             <if test="belongsTo != null">
-                belongsTo = #{belongsTo}
+                AND belongsTo = #{belongsTo}
             </if>
-
-            and belongsTo in (
-                select categoryId from user_category where userId = #{currentUserId}
-            )
-
+            <if test="ownerId != null">
+                AND ownerId = #{ownerId}
+            </if>
+            <if test="assigneeId != null">
+                AND assigneeId = #{assigneeId}
+            </if>
+            <if test="watcherId != null">
+                AND id IN (SELECT ticketId FROM ticket_watcher WHERE userId = #{watcherId})
+            </if>
+            AND belongsTo IN (SELECT categoryId FROM user_category WHERE userId = #{currentUserId})
         </where>
     </select>
 </mapper>

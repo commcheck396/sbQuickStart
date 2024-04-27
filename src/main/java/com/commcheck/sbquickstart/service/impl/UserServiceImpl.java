@@ -215,16 +215,16 @@ public class UserServiceImpl implements UserService {
         Integer type = message.getType();
         Integer sender = message.getSender();
         Integer receiver = message.getReceiver();
-        String senderName = userMapper.findById(sender).getUsername();
-        String receiverName = userMapper.findById(receiver).getUsername();
         String userName = userMapper.findById(currentUserId).getUsername();
         applicationMapper.updateApplicationStatus(messageId, 1);
         if (type == 1) {
 //            userCategoryMapper.addUserToGroup(receiver, sender);
             applicationMapper.updateApplicationMessage(messageId, "管理員" + userName + "同意了您加入组的请求");
+            userCategoryMapper.addRelation(sender, receiver);
         } else if (type == 2) {
 //            adminCategoryMapper.addAdminToGroup(receiver, sender);
             applicationMapper.updateApplicationMessage(messageId, "管理員" + userName + "同意了您成为组管理员的请求");
+            adminCategoryMapper.addAdminRelation(sender, receiver);
         } else if (type == 3) {
             applicationMapper.updateApplicationMessage(messageId, "用戶" + userName + "处理了您的工单提醒。");
         }
@@ -248,6 +248,7 @@ public class UserServiceImpl implements UserService {
         Integer messageId = message.getId();
         approveRequest(messageId, currentUserId);
     }
+
 
     @Override
     public void rejectTicketRequest(Integer ticketId, Integer currentUserId, String msg) {

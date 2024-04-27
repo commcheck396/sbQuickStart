@@ -30,8 +30,12 @@ public class TicketController {
                                          @RequestParam(required = false) Integer belongsTo,
                                          @RequestParam(required = false) Integer priority,
                                          @RequestParam(required = false)Integer state,
-                                         @RequestParam(required = false)Integer type){
-        PageBean<Ticket> page = ticketService.list(pageNum, pageSize, belongsTo, priority, state, type);
+                                         @RequestParam(required = false)Integer type,
+                                         @RequestParam(required = false)Integer assigneeId,
+                                         @RequestParam(required = false)Integer OwnerId,
+                                         @RequestParam(required = false)Integer watcherId
+                                         ){
+        PageBean<Ticket> page = ticketService.list(pageNum, pageSize, belongsTo, priority, state, type, assigneeId, OwnerId, watcherId);
 
         return Result.success(page);
     }
@@ -171,7 +175,7 @@ public class TicketController {
         }
     }
 
-    @PostMapping("/deleteTicket")
+    @DeleteMapping("/deleteTicket")
     public Result deleteTicket(@RequestParam Integer ticketId){
         if(!permissionCheckingUtil.checkEditPermissionForTicket(ticketId)){
             return Result.fail("you don't have permission to modify this ticket");
