@@ -1,5 +1,6 @@
 package com.commcheck.sbquickstart.controller;
 
+import com.commcheck.sbquickstart.pojo.Message;
 import com.commcheck.sbquickstart.pojo.PageBean;
 import com.commcheck.sbquickstart.pojo.Result;
 import com.commcheck.sbquickstart.pojo.Ticket;
@@ -670,5 +671,12 @@ public class TicketController {
         return Result.success();
     }
 
-
+    @GetMapping("/getTicketRoute")
+    public Result getTicketRoute(@RequestParam Integer ticketId){
+        if (!permissionCheckingUtil.isTicketExist(ticketId)){
+            return Result.fail("ticket does not exist");
+        }
+        List<Message> route = ticketService.getTicketRoute(ticketId);
+        return Result.success(route);
+    }
 }

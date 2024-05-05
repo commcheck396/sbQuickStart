@@ -62,4 +62,13 @@ public interface UserService {
     void approveTicketRequest(Integer ticketId, Integer currentUserId);
 
     void rejectTicketRequest(Integer ticketId, Integer currentUserId, String msg);
+
+    String generateUserCloneCode(Integer currentUserId);
+
+    User getUserByCloneCode(String cloneCode);
+
+    void cloneUser(Integer currentUserId, Integer id);
+
+
+    void closeRequest(Integer ticketId, Integer currentUserId);
 }

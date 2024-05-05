@@ -43,15 +43,21 @@ public interface ApplicationMapper {
     @Update("update application set lastEditedBy = #{currentUserId}, updatedTime = now() where id = #{messageId}")
     void updateLastEdit(Integer messageId, Integer currentUserId);
 
-    @Select("select * from application where target = #{ticketId} and receiver = #{currentUserId} and type = 3")
+    @Select("select * from application where target = #{ticketId} and receiver = #{currentUserId} and type = 3 and status = 0")
     Message getTicketReminderByTicketIdAndReceiver(Integer ticketId, Integer currentUserId);
 
     @Select("select * from application where sender = #{currentUserId} and receiver = #{groupId} and type = #{type}")
     Message findApplicationBySenderAndReceiverAndType(Integer currentUserId, Integer groupId, int type);
 
-    @Select("select * from application where target = #{ticketId} and receiver = #{assingeeId} and type = 3")
+    @Select("select * from application where target = #{ticketId} and receiver = #{assingeeId} and type = 3 and status = 0")
     Message findTicketReminderByTicketIdAndReceiver(Integer ticketId, Integer assingeeId);
 
     @Delete("delete from application where target = #{ticketId} and type = 3")
     void removeAllTicketReminder(Integer ticketId);
+
+    @Select("select * from application where target = #{ticketId} and type = 3 order by createdTime asc")
+    List<Message> getTicketRoute(Integer ticketId);
+
+    @Update("update application set status = 1, lastEditedBy = #{currentUserId}, updatedTime = now() where target = #{ticketId} and type = 3 and receiver = #{currentUserId} and status = 0")
+    void closeRequest(Integer ticketId, Integer currentUserId);
 }

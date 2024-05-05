@@ -4,6 +4,7 @@ import com.commcheck.sbquickstart.mapper.*;
 import com.commcheck.sbquickstart.pojo.*;
 import com.commcheck.sbquickstart.utils.Encrypter;
 import com.commcheck.sbquickstart.service.UserService;
+import com.commcheck.sbquickstart.utils.JWTUtil;
 import com.commcheck.sbquickstart.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService {
     private AdminCategoryMapper adminCategoryMapper;
     @Autowired
     private ApplicationMapper applicationMapper;
+    @Autowired
+    private TicketWatcherMapper ticketWatcherMapper;
 //    @Autowired
 //    private PermissionCheckingUtil permissionCheckingUtil;
 //    @Select("select * from users where username = #{username}")
@@ -42,7 +45,7 @@ public class UserServiceImpl implements UserService {
         try {
             userMapper.addUser(username, encryptedPassword, email);
         } catch (Exception e) {
-            System.out.println("add user to Mysql failed");
+            System.out.println(e);
             return Result.fail("add user to Mysql failed");
         }
         System.out.println("add user success");
@@ -256,6 +259,60 @@ public class UserServiceImpl implements UserService {
         Integer messageId = message.getId();
         rejectRequest(messageId, currentUserId, msg);
     }
+
+    @Override
+    public String generateUserCloneCode(Integer currentUserId) {
+//        String idAndTime = currentUserId.toString() + System.currentTimeMillis();
+//        String code = Encrypter.encrypt(idAndTime, "MD5");
+//        return code;
+        Map<String, Object> claims= new HashMap<>();
+        claims.put("id", currentUserId);
+        String token = JWTUtil.JWTGeneration(claims);
+        return token;
+    }
+
+    @Override
+    public User getUserByCloneCode(String cloneCode) {
+        Map<String, Object> claims = JWTUtil.JWTVerification(cloneCode);
+        Integer id = (Integer)claims.get("id");
+        return userMapper.findById(id);
+    }
+
+    @Override
+    public void cloneUser(Integer currentUserId, Integer id) {
+        List<Integer> inGroupIds = userCategoryMapper.groupsIJoined(id);
+        List<Integer> adminGroupIds = adminCategoryMapper.groupsIAdmin(id);
+        List<Integer> watchingTicketIds = ticketWatcherMapper.getTicketIdByWatcherId(id);
+
+        List<Integer> currentInGroupIds = userCategoryMapper.groupsIJoined(currentUserId);
+        List<Integer> currentAdminGroupIds = adminCategoryMapper.groupsIAdmin(currentUserId);
+        List<Integer> currentWatchingTicketIds = ticketWatcherMapper.getTicketIdByWatcherId(currentUserId);
+
+        for (Integer groupId : inGroupIds) {
+            if (!currentInGroupIds.contains(groupId)){
+                userCategoryMapper.addRelation(currentUserId, groupId);
+            }
+        }
+
+        for (Integer groupId : adminGroupIds) {
+            if (!currentAdminGroupIds.contains(groupId)){
+                adminCategoryMapper.addAdminRelation(currentUserId, groupId);
+            }
+        }
+
+        for (Integer ticketId : watchingTicketIds) {
+            if (!currentWatchingTicketIds.contains(ticketId)){
+                ticketWatcherMapper.addWatcher(ticketId, currentUserId);
+            }
+        }
+
+    }
+
+    @Override
+    public void closeRequest(Integer ticketId, Integer currentUserId) {
+        applicationMapper.closeRequest(ticketId, currentUserId);
+    }
+
 
     @Override
     public void rejectRequest(Integer messageId, Integer currentUserId, String Msg) {

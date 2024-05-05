@@ -4,6 +4,7 @@ import com.commcheck.sbquickstart.mapper.ApplicationMapper;
 import com.commcheck.sbquickstart.mapper.TicketMapper;
 import com.commcheck.sbquickstart.mapper.TicketTicketMapper;
 import com.commcheck.sbquickstart.mapper.TicketWatcherMapper;
+import com.commcheck.sbquickstart.pojo.Message;
 import com.commcheck.sbquickstart.pojo.PageBean;
 import com.commcheck.sbquickstart.pojo.Ticket;
 import com.commcheck.sbquickstart.service.TicketService;
@@ -330,6 +331,10 @@ public class TicketServiceImpl implements TicketService {
         return ticketWatcherMapper.getTicketIdByWatcherId(watcherId);
     }
 
+    @Override
+    public List<Message> getTicketRoute(Integer ticketId) {
+        return applicationMapper.getTicketRoute(ticketId);
+    }
 
 
 }

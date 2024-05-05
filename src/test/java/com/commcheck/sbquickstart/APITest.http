@@ -44,7 +44,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo2LCJ1c2Vy
 POST http://localhost:8080/user/login
 Content-Type: application/x-www-form-urlencoded
 
-username = cattest2 &
+username = cattest3 &
 password = 123456
 
 <> 2024-03-14T002823.200.json
@@ -354,3 +354,24 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2Vy
 GET http://localhost:8080/request/getAllRequestForCurrentUser
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoyLCJ1c2VybmFtZSI6ImNhdHRlc3QyIn0sImV4cCI6MTcxNDA0NzM0N30.sDJTPOBQ1g1TsK9_akloyXg7dcXqnfs4ItIagNxbYmI
+
+###
+GET http://localhost:8080/user/generateUserCloneCode
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo3LCJ1c2VybmFtZSI6IjExMTExIn0sImV4cCI6MTcxNDY0MTc2OX0.gVtAq96xygTfFM1Y1Qt49-MQEDkDBQ5MxQ9euO6IK1I
+
+###
+
+POST http://localhost:8080/user/cloneUser?cloneCode=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo3fSwiZXhwIjoxNzE0NjQxNzg5fQ.SOzPF4sIlYNZ3Rof6dq1q-2ZWGYIMu0uFBNUXRuKQLs
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdHRlc3QzIn0sImV4cCI6MTcxNDY0MTgxOX0.xQuy_M8-R0IxXhe6iJqdonKcNOqcOxAOWeKKjgzj9EI
+
+###
+GET http://localhost:8080/ticket/getTicketRoute?ticketId=90
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJ1c2VybmFtZSI6ImNhdHRlc3QzIn0sImV4cCI6MTcxNTMxMTU3Mn0.2u9eHnRcNlvYSW8leashO-RK-UR-5icd6phKFeVvfuI
+
+###
+GET http://localhost:5173/api/user/canUserEditTicket?ticketId=90
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo3LCJ1c2VybmFtZSI6IjExMTExIn0sImV4cCI6MTcxNTMxMzU3MH0.TJN5CpR_Xw2t0lWHTZNFbpz3ycLM9NNqaVIG9KWC7lc

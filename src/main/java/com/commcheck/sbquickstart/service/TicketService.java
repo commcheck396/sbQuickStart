@@ -1,6 +1,7 @@
 package com.commcheck.sbquickstart.service;
 
 
+import com.commcheck.sbquickstart.pojo.Message;
 import com.commcheck.sbquickstart.pojo.PageBean;
 import com.commcheck.sbquickstart.pojo.Ticket;
 import org.springframework.stereotype.Service;
@@ -104,4 +105,5 @@ public interface TicketService {
 
     List<Integer> getTicketByWatcherId(Integer watcherId);
 
+    List<Message> getTicketRoute(Integer ticketId);
 }

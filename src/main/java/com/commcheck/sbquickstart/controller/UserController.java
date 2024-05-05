@@ -307,5 +307,32 @@ public class UserController {
         }
     }
 
+    @GetMapping("/generateUserCloneCode")
+    public Result generateUserCloneCode() {
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        String cloneCode = userService.generateUserCloneCode(currentUserId);
+        return Result.success(cloneCode);
+    }
+
+    @GetMapping("/getUserByCloneCode")
+    public Result getUserByCloneCode(@RequestParam String cloneCode) {
+        User user = userService.getUserByCloneCode(cloneCode);
+        return Result.success(user);
+    }
+
+    @PostMapping("/cloneUser")
+    public Result cloneUser(@RequestParam String cloneCode) {
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        User sourceUser = userService.getUserByCloneCode(cloneCode);
+        if (sourceUser == null) {
+            return Result.fail("clone code not exists...");
+        }
+        if (sourceUser.getId().equals(currentUserId)) {
+            return Result.fail("cannot clone to yourself...");
+        }
+        userService.cloneUser(currentUserId, sourceUser.getId());
+        return Result.success();
+    }
+
 
 }

@@ -104,4 +104,11 @@ public class RequestController {
         return Result.success(messages);
     }
 
+    @PostMapping("/closeRequest")
+    public Result closeRequest(@RequestParam Integer ticketId){
+        Integer currentUserId = permissionCheckingUtil.getCurrentUserId();
+        userService.closeRequest(ticketId, currentUserId);
+        return Result.success();
+    }
+
 }
